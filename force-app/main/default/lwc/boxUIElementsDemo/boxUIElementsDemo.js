@@ -45,4 +45,20 @@ export default class BoxUIElementsDemo extends LightningElement {
         console.log('Saving modal data...');
         this.isModalOpen = false;
     }
+    
+    // Upload handlers
+    handleFilesAdded(event) {
+        const files = event.detail.files;
+        console.log('Files added:', files);
+    }
+    
+    handleUploadComplete(event) {
+        const item = event.detail.item;
+        console.log('Upload complete:', item);
+    }
+    
+    handleUploadError(event) {
+        const { item, error } = event.detail;
+        console.error('Upload error:', item, error);
+    }
 }

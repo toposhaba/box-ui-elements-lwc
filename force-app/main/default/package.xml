@@ -4,10 +4,15 @@
         <members>boxButton</members>
         <members>boxCheckbox</members>
         <members>boxCheckboxTooltip</members>
+        <members>boxContentUploader</members>
         <members>boxLoadingIndicator</members>
         <members>boxModal</members>
         <members>boxRadarAnimation</members>
         <members>boxUIElementsDemo</members>
+        <members>boxUploadItem</members>
+        <members>boxUploadItemList</members>
+        <members>boxUploadsManager</members>
+        <members>boxUploadState</members>
         <name>LightningComponentBundle</name>
     </types>
     <version>59.0</version>

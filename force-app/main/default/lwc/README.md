@@ -152,9 +152,83 @@ A tooltip component specifically for checkbox help text.
 
 The components maintain their original CSS classes for styling compatibility. You can override styles using CSS in your parent components or by passing custom classes via the `className` property.
 
+### 7. boxContentUploader
+A comprehensive file upload component with drag-and-drop support, progress tracking, and upload management.
+
+**Properties:**
+- `fileLimit` - Maximum number of files (default: 100)
+- `rootFolderId` - Target folder ID for uploads
+- `isLarge` - Use large size variant
+- `isSmall` - Use small size variant
+- `isFolderUploadEnabled` - Enable folder uploads
+- `useUploadsManager` - Show uploads manager UI
+- `allowedExtensions` - Comma-separated list of allowed file extensions
+
+**Events:**
+- `filesadded` - Fired when files are added to queue
+- `uploadprogress` - Fired during upload progress
+- `uploadcomplete` - Fired when a file completes upload
+- `uploaderror` - Fired on upload error
+- `alluploadscomplete` - Fired when all uploads complete
+- `itemremoved` - Fired when an item is removed
+
+**Example Usage:**
+```html
+<c-box-content-uploader
+    file-limit="50"
+    use-uploads-manager={true}
+    allowed-extensions="jpg,png,pdf,docx"
+    onfilesadded={handleFilesAdded}
+    onuploadcomplete={handleUploadComplete}>
+</c-box-content-uploader>
+```
+
+### 8. boxUploadState
+Shows the current state of the upload area (empty, in progress, success).
+
+**Properties:**
+- `view` - Current view state
+- `canDrop` - Whether files can be dropped
+- `isOver` - Whether dragging over the area
+- `isFolderUploadEnabled` - Show folder upload option
+- `acceptedFileTypes` - Accepted file types
+
+### 9. boxUploadItemList
+Displays a list of files being uploaded with their status.
+
+**Properties:**
+- `items` - Array of upload items
+
+### 10. boxUploadItem
+Individual upload item showing file info, progress, and actions.
+
+**Properties:**
+- `item` - Upload item object with file details
+
+### 11. boxUploadsManager
+A fixed-position upload manager that tracks multiple file uploads.
+
+**Properties:**
+- `items` - Array of upload items
+- `isExpanded` - Whether the manager is expanded
+- `isVisible` - Whether the manager is visible
+- `totalProgress` - Overall upload progress percentage
+
+## Upload Component Features
+
+The upload components provide:
+- **Drag and Drop**: Drag files directly onto the upload area
+- **Progress Tracking**: Real-time upload progress for each file
+- **Concurrent Uploads**: Upload multiple files simultaneously
+- **Error Handling**: Retry failed uploads
+- **File Validation**: Restrict uploads by file type
+- **Upload Manager**: Track all uploads in a collapsible panel
+- **Responsive Design**: Works on desktop and mobile
+
 ## Notes
 
 - These components are designed to work within the Salesforce platform
 - They leverage SLDS for consistent look and feel
 - Focus management and accessibility features are maintained from the original React components
 - Some advanced features like portals and complex positioning may need adjustment based on your specific use case
+- The upload components use simulated uploads by default - integrate with your actual upload API for production use

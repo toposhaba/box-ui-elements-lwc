@@ -1,0 +1,51 @@
+/* Upload State Container */
+.bcu-upload-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    padding: 40px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.bcu-upload-state-content {
+    max-width: 400px;
+}
+
+/* Icon Styling */
+.bcu-upload-state-icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* State Variations */
+.bcu-upload-state.bcu-upload-empty {
+    background-color: #f8f8f8;
+    border: 2px dashed #d8d8d8;
+    border-radius: 4px;
+}
+
+.bcu-upload-state.bcu-upload-empty.bcu-is-over {
+    background-color: #e8f4fd;
+    border-color: #0061d5;
+}
+
+.bcu-upload-state.bcu-upload-success {
+    background-color: #f0f8f0;
+    border: 2px solid #4bca81;
+    border-radius: 4px;
+}
+
+.bcu-upload-state.bcu-upload-inprogress {
+    background-color: #f8f8f8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .bcu-upload-state {
+        min-height: 200px;
+        padding: 20px;
+    }
+}

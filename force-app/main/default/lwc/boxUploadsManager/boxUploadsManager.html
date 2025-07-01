@@ -1,0 +1,44 @@
+<template>
+    <div class={containerClass} data-id="uploads-manager">
+        <!-- Progress Bar Header -->
+        <div class="bcu-uploads-manager-header" onclick={handleToggle}>
+            <div class="bcu-progress-info">
+                <span class="slds-text-body_small">{progressBarTitle}</span>
+                <template if:true={hasFailedUploads}>
+                    <lightning-button
+                        variant="base"
+                        label="Retry All"
+                        size="small"
+                        onclick={handleRetryAll}
+                        class="slds-m-left_small">
+                    </lightning-button>
+                </template>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="bcu-overall-progress-bar">
+                <div class="bcu-progress-track">
+                    <div class="bcu-progress-fill" style={progressStyle}></div>
+                </div>
+            </div>
+            
+            <!-- Toggle Button -->
+            <lightning-button-icon
+                icon-name={toggleIconName}
+                alternative-text="Toggle uploads manager"
+                size="small"
+                class="bcu-toggle-button">
+            </lightning-button-icon>
+        </div>
+        
+        <!-- Expanded Content -->
+        <template if:true={isExpanded}>
+            <div class="bcu-uploads-manager-content">
+                <c-box-upload-item-list
+                    items={items}
+                    onitemaction={handleItemAction}>
+                </c-box-upload-item-list>
+            </div>
+        </template>
+    </div>
+</template>

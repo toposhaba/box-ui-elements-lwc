@@ -1,0 +1,20 @@
+.bcu-upload-item-list {
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: #ffffff;
+}
+
+.bcu-upload-item-list ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bcu-upload-item-list .slds-item {
+    padding: 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.bcu-upload-item-list .slds-item:last-child {
+    border-bottom: none;
+}

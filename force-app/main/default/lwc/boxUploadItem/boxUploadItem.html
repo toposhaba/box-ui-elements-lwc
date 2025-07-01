@@ -1,0 +1,60 @@
+<template>
+    <article class={itemClass}>
+        <div class="slds-media slds-media_center slds-p-around_small">
+            <!-- File Icon -->
+            <div class="slds-media__figure">
+                <lightning-icon 
+                    icon-name={statusIcon}
+                    alternative-text="File"
+                    size="small"
+                    variant={statusIconVariant}>
+                </lightning-icon>
+            </div>
+            
+            <!-- File Info -->
+            <div class="slds-media__body">
+                <div class="bcu-item-info">
+                    <h3 class="slds-text-body_regular slds-truncate" title={item.name}>
+                        {item.name}
+                    </h3>
+                    <p class="slds-text-body_small slds-text-color_weak">
+                        {fileSize} • {statusText}
+                    </p>
+                </div>
+                
+                <!-- Progress Bar -->
+                <template if:true={showProgress}>
+                    <div class="bcu-progress-container slds-m-top_x-small">
+                        <div class="bcu-progress-bar">
+                            <div class="bcu-progress-fill" style={progressStyle}></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            
+            <!-- Actions -->
+            <div class="slds-media__figure slds-media__figure_reverse">
+                <div class="bcu-item-actions">
+                    <template if:true={showRetryButton}>
+                        <lightning-button-icon
+                            icon-name="utility:refresh"
+                            alternative-text="Retry"
+                            title="Retry upload"
+                            size="small"
+                            onclick={handleRetry}>
+                        </lightning-button-icon>
+                    </template>
+                    <template if:true={showRemoveButton}>
+                        <lightning-button-icon
+                            icon-name="utility:close"
+                            alternative-text="Remove"
+                            title="Remove file"
+                            size="small"
+                            onclick={handleRemove}>
+                        </lightning-button-icon>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </article>
+</template>

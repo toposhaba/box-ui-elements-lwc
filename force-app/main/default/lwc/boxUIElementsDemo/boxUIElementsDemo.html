@@ -131,6 +131,20 @@
                 </c-box-button>
             </div>
             
+            <!-- Upload Component Example -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">File Upload Example</h3>
+                
+                <c-box-content-uploader
+                    file-limit="10"
+                    use-uploads-manager={true}
+                    allowed-extensions="jpg,png,pdf,docx,xlsx"
+                    onfilesadded={handleFilesAdded}
+                    onuploadcomplete={handleUploadComplete}
+                    onuploaderror={handleUploadError}>
+                </c-box-content-uploader>
+            </div>
+            
         </div>
     </lightning-card>
     
