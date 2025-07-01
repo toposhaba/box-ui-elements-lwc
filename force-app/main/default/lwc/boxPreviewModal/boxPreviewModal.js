@@ -8,8 +8,8 @@ export default class BoxPreviewModal extends LightningElement {
     @api sharedLink;
     @api sharedLinkPassword;
     @api showAnnotations = false;
-    @api canDownload = true;
-    @api canPrint = true;
+    @api canDownload = false;
+    @api canPrint = false;
     
     @track previewError = null;
     
@@ -31,6 +31,14 @@ export default class BoxPreviewModal extends LightningElement {
     
     get showPreview() {
         return this.isOpen && this.fileId && this.token;
+    }
+    
+    get canDownloadDisabled() {
+        return !this.canDownload;
+    }
+    
+    get canPrintDisabled() {
+        return !this.canPrint;
     }
     
     handleClose() {

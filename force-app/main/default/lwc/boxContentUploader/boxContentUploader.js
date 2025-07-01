@@ -30,7 +30,7 @@ export default class BoxContentUploader extends LightningElement {
     @api uploadHost;
     @api sharedLink;
     @api sharedLinkPassword;
-    @api overwrite = true;
+    @api overwrite = false;
     
     @track view = VIEW_UPLOAD_EMPTY;
     @track items = [];

@@ -22,6 +22,14 @@ export default class BoxExplorerFooter extends LightningElement {
         return this.hasMore || (this.currentOffset + this.pageSize < this.totalCount);
     }
     
+    get hasPreviousDisabled() {
+        return !this.hasPrevious;
+    }
+    
+    get hasNextDisabled() {
+        return !this.hasNext;
+    }
+    
     get startRecord() {
         return this.totalCount === 0 ? 0 : this.currentOffset + 1;
     }

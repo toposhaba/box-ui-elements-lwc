@@ -4,16 +4,20 @@ export default class BoxExplorerList extends LightningElement {
     @api items = [];
     @api selectedItems = [];
     @api isPickerMode = false;
-    @api canPreview = true;
-    @api canDownload = true;
-    @api canDelete = true;
-    @api canRename = true;
-    @api canShare = true;
+    @api canPreview = false;
+    @api canDownload = false;
+    @api canDelete = false;
+    @api canRename = false;
+    @api canShare = false;
     @api sortBy = 'name';
     @api sortDirection = 'ASC';
     
     get selectedItemIds() {
         return this.selectedItems.map(item => item.id);
+    }
+    
+    get hideCheckboxColumn() {
+        return !this.isPickerMode;
     }
     
     get columns() {

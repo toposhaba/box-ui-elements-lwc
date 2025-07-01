@@ -44,13 +44,13 @@
                                     icon-name="utility:download"
                                     alternative-text="Download"
                                     onclick={handleDownload}
-                                    disabled={!canDownload}>
+                                    disabled={canDownloadDisabled}>
                                 </lightning-button-icon>
                                 <lightning-button-icon
                                     icon-name="utility:print"
                                     alternative-text="Print"
                                     onclick={handlePrint}
-                                    disabled={!canPrint}>
+                                    disabled={canPrintDisabled}>
                                 </lightning-button-icon>
                                 <lightning-button-icon
                                     icon-name="utility:expand"

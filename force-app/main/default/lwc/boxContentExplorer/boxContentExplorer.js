@@ -28,13 +28,13 @@ export default class BoxContentExplorer extends LightningElement {
     @api rootFolderId = DEFAULT_ROOT;
     @api sharedLink;
     @api sharedLinkPassword;
-    @api canDownload = true;
-    @api canDelete = true;
-    @api canRename = true;
-    @api canShare = true;
-    @api canPreview = true;
-    @api canUpload = true;
-    @api canCreateNewFolder = true;
+    @api canDownload = false;
+    @api canDelete = false;
+    @api canRename = false;
+    @api canShare = false;
+    @api canPreview = false;
+    @api canUpload = false;
+    @api canCreateNewFolder = false;
     @api canSelectMultiple = false;
     @api defaultView = 'files';
     @api sortBy = 'name';
@@ -109,6 +109,10 @@ export default class BoxContentExplorer extends LightningElement {
     
     get hasSelection() {
         return this.selectedItems.length > 0;
+    }
+    
+    get hasSelectionDisabled() {
+        return !this.hasSelection;
     }
     
     get selectionCount() {

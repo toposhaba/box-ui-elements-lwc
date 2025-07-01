@@ -21,10 +21,10 @@ export default class BoxContentPreview extends LightningElement {
     @api sharedLinkPassword;
     @api showAnnotations = false;
     @api showAnnotationsControls = false;
-    @api canDownload = true;
-    @api canPrint = true;
-    @api showDownload = true;
-    @api showPrint = true;
+    @api canDownload = false;
+    @api canPrint = false;
+    @api showDownload = false;
+    @api showPrint = false;
     @api collection = [];
     @api startAt;
     @api enableThumbnailsSidebar = false;
@@ -32,7 +32,7 @@ export default class BoxContentPreview extends LightningElement {
     @api hotkeys = {};
     @api pauseRequests = false;
     @api header = 'light';
-    @api useHotkeys = true;
+    @api useHotkeys = false;
     @api requestInterceptor;
     @api responseInterceptor;
     

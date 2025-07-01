@@ -7,12 +7,12 @@ export default class BoxContentSidebar extends LightningElement {
     @api apiHost;
     @api sharedLink;
     @api sharedLinkPassword;
-    @api showActivityFeed = true;
-    @api showDetails = true;
-    @api showSkills = true;
-    @api showMetadata = true;
-    @api showVersions = true;
-    @api showAI = true;
+    @api showActivityFeed = false;
+    @api showDetails = false;
+    @api showSkills = false;
+    @api showMetadata = false;
+    @api showVersions = false;
+    @api showAI = false;
     @api defaultPanel = 'details';
     
     @track activeTab = 'details';
@@ -31,22 +31,52 @@ export default class BoxContentSidebar extends LightningElement {
         const tabs = [];
         
         if (this.showDetails) {
-            tabs.push({ id: 'details', label: 'Details', icon: 'utility:info' });
+            tabs.push({ 
+                id: 'details', 
+                label: 'Details', 
+                icon: 'utility:info',
+                cssClass: this.activeTab === 'details' ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item'
+            });
         }
         if (this.showActivityFeed) {
-            tabs.push({ id: 'activity', label: 'Activity', icon: 'utility:activity' });
+            tabs.push({ 
+                id: 'activity', 
+                label: 'Activity', 
+                icon: 'utility:activity',
+                cssClass: this.activeTab === 'activity' ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item'
+            });
         }
         if (this.showAI) {
-            tabs.push({ id: 'ai', label: 'Box AI', icon: 'utility:einstein' });
+            tabs.push({ 
+                id: 'ai', 
+                label: 'Box AI', 
+                icon: 'utility:einstein',
+                cssClass: this.activeTab === 'ai' ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item'
+            });
         }
         if (this.showVersions) {
-            tabs.push({ id: 'versions', label: 'Versions', icon: 'utility:layers' });
+            tabs.push({ 
+                id: 'versions', 
+                label: 'Versions', 
+                icon: 'utility:layers',
+                cssClass: this.activeTab === 'versions' ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item'
+            });
         }
         if (this.showSkills) {
-            tabs.push({ id: 'skills', label: 'Skills', icon: 'utility:knowledge_base' });
+            tabs.push({ 
+                id: 'skills', 
+                label: 'Skills', 
+                icon: 'utility:knowledge_base',
+                cssClass: this.activeTab === 'skills' ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item'
+            });
         }
         if (this.showMetadata) {
-            tabs.push({ id: 'metadata', label: 'Metadata', icon: 'utility:database' });
+            tabs.push({ 
+                id: 'metadata', 
+                label: 'Metadata', 
+                icon: 'utility:database',
+                cssClass: this.activeTab === 'metadata' ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item'
+            });
         }
         
         return tabs;
@@ -96,6 +126,25 @@ export default class BoxContentSidebar extends LightningElement {
         
         return new Date(this.file.created_at).toLocaleString();
     }
+    
+    // Computed properties for permissions display
+    get canDownloadText() {
+        return this.file?.permissions?.can_download ? 'Yes' : 'No';
+    }
+    
+    get canPreviewText() {
+        return this.file?.permissions?.can_preview ? 'Yes' : 'No';
+    }
+    
+    get canEditText() {
+        return this.file?.permissions?.can_edit ? 'Yes' : 'No';
+    }
+    
+    get canShareText() {
+        return this.file?.permissions?.can_share ? 'Yes' : 'No';
+    }
+    
+
     
     connectedCallback() {
         this.activeTab = this.defaultPanel;
