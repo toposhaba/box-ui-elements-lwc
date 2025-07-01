@@ -15,26 +15,57 @@
                     </button>
                     <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">{itemName}</h2>
                 </header>
-                <div class="slds-modal__content slds-p-around_medium" style="min-height: 400px;">
-                    <div class="slds-align_absolute-center">
-                        <div class="slds-text-align_center">
-                            <lightning-icon 
-                                icon-name="utility:preview" 
-                                size="large"
-                                alternative-text="Preview">
-                            </lightning-icon>
-                            <p class="slds-m-top_medium">{previewMessage}</p>
-                            <p class="slds-text-body_small slds-m-top_small">
-                                Note: Full preview functionality requires Box Preview SDK integration
-                            </p>
+                <div class="slds-modal__content slds-p-around_none" style="height: 600px;">
+                    <template if:true={showPreview}>
+                        <c-box-content-preview
+                            file-id={fileId}
+                            token={token}
+                            api-host={apiHost}
+                            shared-link={sharedLink}
+                            shared-link-password={sharedLinkPassword}
+                            show-annotations={showAnnotations}
+                            can-download={canDownload}
+                            can-print={canPrint}
+                            onload={handlePreviewLoad}
+                            onerror={handlePreviewError}>
+                        </c-box-content-preview>
+                    </template>
+                    <template if:false={showPreview}>
+                        <div class="slds-align_absolute-center slds-p-around_large">
+                            <p>Unable to load preview. Please ensure a valid file and token are provided.</p>
                         </div>
-                    </div>
+                    </template>
                 </div>
                 <footer class="slds-modal__footer">
-                    <lightning-button
-                        label="Close"
-                        onclick={handleClose}>
-                    </lightning-button>
+                    <div class="slds-grid slds-grid_align-spread">
+                        <div class="slds-col">
+                            <lightning-button-group>
+                                <lightning-button-icon
+                                    icon-name="utility:download"
+                                    alternative-text="Download"
+                                    onclick={handleDownload}
+                                    disabled={!canDownload}>
+                                </lightning-button-icon>
+                                <lightning-button-icon
+                                    icon-name="utility:print"
+                                    alternative-text="Print"
+                                    onclick={handlePrint}
+                                    disabled={!canPrint}>
+                                </lightning-button-icon>
+                                <lightning-button-icon
+                                    icon-name="utility:expand"
+                                    alternative-text="Fullscreen"
+                                    onclick={handleFullscreen}>
+                                </lightning-button-icon>
+                            </lightning-button-group>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button
+                                label="Close"
+                                onclick={handleClose}>
+                            </lightning-button>
+                        </div>
+                    </div>
                 </footer>
             </div>
         </section>

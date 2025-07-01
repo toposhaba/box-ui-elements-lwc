@@ -1,0 +1,166 @@
+<template>
+    <div class="box-ai-container">
+        <div class="slds-card">
+            <div class="slds-card__header">
+                <h2 class="slds-text-heading_small">
+                    <lightning-icon 
+                        icon-name="utility:einstein" 
+                        size="small"
+                        class="slds-m-right_small">
+                    </lightning-icon>
+                    {modeTitle}
+                </h2>
+                <template if:true={hasHistory}>
+                    <lightning-button
+                        label="Clear History"
+                        variant="base"
+                        size="small"
+                        onclick={handleClearHistory}>
+                    </lightning-button>
+                </template>
+            </div>
+            
+            <div class="slds-card__body slds-card__body_inner">
+                <!-- Error Message -->
+                <template if:true={error}>
+                    <div class="slds-notify slds-notify_alert slds-alert_error slds-m-bottom_medium" role="alert">
+                        <span class="slds-assistive-text">error</span>
+                        <lightning-icon 
+                            icon-name="utility:error"
+                            variant="error"
+                            size="small"
+                            class="slds-m-right_small">
+                        </lightning-icon>
+                        <span>{error}</span>
+                        <lightning-button
+                            label="Retry"
+                            variant="base"
+                            size="small"
+                            class="slds-m-left_medium"
+                            onclick={handleRetry}>
+                        </lightning-button>
+                    </div>
+                </template>
+                
+                <!-- Ask Mode Input -->
+                <template if:true={isAskMode}>
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <lightning-textarea
+                                placeholder={placeholder}
+                                value={question}
+                                onchange={handleQuestionChange}
+                                onkeypress={handleKeyPress}
+                                disabled={isLoading}
+                                max-length="500">
+                            </lightning-textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-m-top_small">
+                        <lightning-button
+                            label={submitButtonLabel}
+                            variant="brand"
+                            icon-name="utility:einstein"
+                            disabled={isLoading}
+                            onclick={handleSubmit}>
+                        </lightning-button>
+                    </div>
+                </template>
+                
+                <!-- Extract Mode Input -->
+                <template if:true={isExtractMode}>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">
+                            What information would you like to extract?
+                        </label>
+                        <div class="slds-form-element__control">
+                            <lightning-input
+                                placeholder="e.g., Extract all dates, names, and dollar amounts"
+                                value={question}
+                                onchange={handleQuestionChange}
+                                disabled={isLoading}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-m-top_small">
+                        <lightning-button
+                            label={submitButtonLabel}
+                            variant="brand"
+                            icon-name="utility:magicwand"
+                            disabled={isLoading}
+                            onclick={handleSubmit}>
+                        </lightning-button>
+                    </div>
+                </template>
+                
+                <!-- Loading State -->
+                <template if:true={isLoading}>
+                    <div class="slds-align_absolute-center slds-p-around_medium">
+                        <c-box-loading-indicator size="medium"></c-box-loading-indicator>
+                        <span class="slds-m-left_small">Processing with Box AI...</span>
+                    </div>
+                </template>
+                
+                <!-- Response Display -->
+                <template if:true={hasResponse}>
+                    <div class="response-container slds-m-top_medium">
+                        <!-- Summary/Extract Response -->
+                        <template if:false={isAskMode}>
+                            <div class="slds-box slds-theme_shade">
+                                <h3 class="slds-text-heading_x-small slds-m-bottom_small">
+                                    <template if:true={isSummarizeMode}>Summary</template>
+                                    <template if:true={isExtractMode}>Extracted Information</template>
+                                </h3>
+                                <div class="response-text">
+                                    {response}
+                                </div>
+                                
+                                <!-- Structured Data for Extract Mode -->
+                                <template if:true={isExtractMode}>
+                                    <template if:true={extractedData.dates}>
+                                        <div class="slds-m-top_small">
+                                            <strong>Dates Found:</strong>
+                                            <ul class="slds-list_dotted">
+                                                <template for:each={extractedData.dates} for:item="date">
+                                                    <li key={date}>{date}</li>
+                                                </template>
+                                            </ul>
+                                        </div>
+                                    </template>
+                                    <template if:true={extractedData.amounts}>
+                                        <div class="slds-m-top_small">
+                                            <strong>Amounts Found:</strong>
+                                            <ul class="slds-list_dotted">
+                                                <template for:each={extractedData.amounts} for:item="amount">
+                                                    <li key={amount}>{amount}</li>
+                                                </template>
+                                            </ul>
+                                        </div>
+                                    </template>
+                                </template>
+                            </div>
+                        </template>
+                        
+                        <!-- Conversation History for Ask Mode -->
+                        <template if:true={isAskMode}>
+                            <div class="conversation-history">
+                                <template for:each={conversationHistory} for:item="conv">
+                                    <div key={conv.id} class="conversation-item slds-m-bottom_medium">
+                                        <div class="question slds-box slds-theme_default slds-m-bottom_x-small">
+                                            <strong>Q:</strong> {conv.question}
+                                        </div>
+                                        <div class="answer slds-box slds-theme_shade">
+                                            <strong>A:</strong> {conv.answer}
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>

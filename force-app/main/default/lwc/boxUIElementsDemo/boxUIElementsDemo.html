@@ -193,6 +193,72 @@
                 </template>
             </div>
             
+            <!-- Content Preview Example -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">Content Preview Example</h3>
+                <div class="slds-box" style="height: 500px;">
+                    <c-box-content-preview
+                        file-id={previewFileId}
+                        token={boxToken}
+                        show-annotations={false}
+                        can-download={true}
+                        can-print={true}
+                        onload={handlePreviewLoad}
+                        onerror={handlePreviewError}>
+                    </c-box-content-preview>
+                </div>
+            </div>
+            
+            <!-- Box AI Examples -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">Box AI Examples</h3>
+                
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <!-- Ask Mode -->
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                        <c-box-a-i
+                            token={boxToken}
+                            file-id={previewFileId}
+                            mode="ask"
+                            placeholder="Ask a question about this document..."
+                            onresponse={handleAIResponse}>
+                        </c-box-a-i>
+                    </div>
+                    
+                    <!-- Summarize Mode -->
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2">
+                        <c-box-a-i
+                            token={boxToken}
+                            file-id={previewFileId}
+                            mode="summarize"
+                            onsummary={handleAISummary}>
+                        </c-box-a-i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Sidebar Example -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">Content Sidebar Example</h3>
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-2">
+                        <div class="slds-box slds-theme_shade" style="height: 400px;">
+                            <p class="slds-text-align_center slds-p-around_large">
+                                Preview or content would be displayed here
+                            </p>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2" style="height: 400px;">
+                        <c-box-content-sidebar
+                            file-id={previewFileId}
+                            token={boxToken}
+                            show-a-i={true}
+                            default-panel="ai">
+                        </c-box-content-sidebar>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </lightning-card>
     

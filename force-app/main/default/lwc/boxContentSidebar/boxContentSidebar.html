@@ -1,0 +1,252 @@
+<template>
+    <div class="box-content-sidebar">
+        <!-- Loading State -->
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-p-around_medium">
+                <c-box-loading-indicator size="medium"></c-box-loading-indicator>
+            </div>
+        </template>
+        
+        <!-- Error State -->
+        <template if:true={error}>
+            <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                <span class="slds-assistive-text">error</span>
+                <lightning-icon 
+                    icon-name="utility:error"
+                    variant="error"
+                    size="small"
+                    class="slds-m-right_small">
+                </lightning-icon>
+                <span>{error}</span>
+            </div>
+        </template>
+        
+        <!-- Content -->
+        <template if:false={isLoading}>
+            <!-- Tab Navigation -->
+            <div class="slds-tabs_default">
+                <ul class="slds-tabs_default__nav" role="tablist">
+                    <template for:each={tabs} for:item="tab">
+                        <li key={tab.id} 
+                            class={tab.id === activeTab ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item'}
+                            role="presentation">
+                            <a class="slds-tabs_default__link"
+                               role="tab"
+                               data-tab-id={tab.id}
+                               onclick={handleTabClick}>
+                                <lightning-icon 
+                                    icon-name={tab.icon}
+                                    size="x-small"
+                                    class="slds-m-right_x-small">
+                                </lightning-icon>
+                                {tab.label}
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+                
+                <!-- Tab Content -->
+                <div class="slds-tabs_default__content">
+                    <!-- Details Tab -->
+                    <template if:true={showDetailsTab}>
+                        <div class="slds-p-around_small">
+                            <h3 class="slds-text-heading_small slds-m-bottom_medium">File Details</h3>
+                            
+                            <dl class="slds-list_horizontal slds-wrap">
+                                <dt class="slds-item_label slds-text-color_weak">Name:</dt>
+                                <dd class="slds-item_detail">{file.name}</dd>
+                                
+                                <dt class="slds-item_label slds-text-color_weak">Size:</dt>
+                                <dd class="slds-item_detail">{formattedFileSize}</dd>
+                                
+                                <dt class="slds-item_label slds-text-color_weak">Modified:</dt>
+                                <dd class="slds-item_detail">{formattedModifiedDate}</dd>
+                                
+                                <dt class="slds-item_label slds-text-color_weak">Created:</dt>
+                                <dd class="slds-item_detail">{formattedCreatedDate}</dd>
+                                
+                                <template if:true={file.owned_by}>
+                                    <dt class="slds-item_label slds-text-color_weak">Owner:</dt>
+                                    <dd class="slds-item_detail">{file.owned_by.name}</dd>
+                                </template>
+                                
+                                <template if:true={file.description}>
+                                    <dt class="slds-item_label slds-text-color_weak">Description:</dt>
+                                    <dd class="slds-item_detail">{file.description}</dd>
+                                </template>
+                            </dl>
+                            
+                            <!-- Permissions -->
+                            <template if:true={file.permissions}>
+                                <h4 class="slds-text-heading_x-small slds-m-top_medium slds-m-bottom_small">Permissions</h4>
+                                <ul class="slds-list_dotted">
+                                    <li>Can Download: {file.permissions.can_download ? 'Yes' : 'No'}</li>
+                                    <li>Can Preview: {file.permissions.can_preview ? 'Yes' : 'No'}</li>
+                                    <li>Can Edit: {file.permissions.can_edit ? 'Yes' : 'No'}</li>
+                                    <li>Can Share: {file.permissions.can_share ? 'Yes' : 'No'}</li>
+                                </ul>
+                            </template>
+                        </div>
+                    </template>
+                    
+                    <!-- Activity Tab -->
+                    <template if:true={showActivityTab}>
+                        <div class="slds-p-around_small">
+                            <h3 class="slds-text-heading_small slds-m-bottom_medium">Activity Feed</h3>
+                            
+                            <template if:true={fileActivity.length}>
+                                <ul class="slds-timeline">
+                                    <template for:each={fileActivity} for:item="activity">
+                                        <li key={activity.id}>
+                                            <div class="slds-timeline__item_expandable">
+                                                <span class="slds-assistive-text">{activity.type}</span>
+                                                <div class="slds-media">
+                                                    <div class="slds-media__figure">
+                                                        <lightning-icon 
+                                                            icon-name="utility:activity"
+                                                            size="small">
+                                                        </lightning-icon>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <p>{activity.message}</p>
+                                                        <p class="slds-text-body_small slds-text-color_weak">
+                                                            {activity.created_at}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </template>
+                            <template if:false={fileActivity.length}>
+                                <p class="slds-text-body_regular slds-text-color_weak">No activity to display</p>
+                            </template>
+                        </div>
+                    </template>
+                    
+                    <!-- Box AI Tab -->
+                    <template if:true={showAITab}>
+                        <div class="slds-p-around_small">
+                            <c-box-a-i
+                                token={token}
+                                api-host={apiHost}
+                                file-id={fileId}
+                                mode="ask"
+                                onresponse={handleAIResponse}>
+                            </c-box-a-i>
+                        </div>
+                    </template>
+                    
+                    <!-- Versions Tab -->
+                    <template if:true={showVersionsTab}>
+                        <div class="slds-p-around_small">
+                            <h3 class="slds-text-heading_small slds-m-bottom_medium">Version History</h3>
+                            
+                            <template if:true={fileVersions.length}>
+                                <div class="slds-scrollable_y" style="max-height: 300px;">
+                                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th scope="col">Version</th>
+                                                <th scope="col">Modified</th>
+                                                <th scope="col">Modified By</th>
+                                                <th scope="col">Size</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={fileVersions} for:item="version">
+                                                <tr key={version.id}>
+                                                    <td>{version.version_number}</td>
+                                                    <td>{version.created_at}</td>
+                                                    <td>{version.modified_by.name}</td>
+                                                    <td>{version.size}</td>
+                                                    <td>
+                                                        <lightning-button-group>
+                                                            <lightning-button-icon
+                                                                icon-name="utility:download"
+                                                                alternative-text="Download"
+                                                                size="x-small"
+                                                                data-version-id={version.id}
+                                                                onclick={handleDownloadVersion}>
+                                                            </lightning-button-icon>
+                                                            <lightning-button-icon
+                                                                icon-name="utility:upload"
+                                                                alternative-text="Promote"
+                                                                size="x-small"
+                                                                data-version-id={version.id}
+                                                                onclick={handlePromoteVersion}>
+                                                            </lightning-button-icon>
+                                                        </lightning-button-group>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </template>
+                            <template if:false={fileVersions.length}>
+                                <p class="slds-text-body_regular slds-text-color_weak">No version history available</p>
+                            </template>
+                        </div>
+                    </template>
+                    
+                    <!-- Skills Tab -->
+                    <template if:true={showSkillsTab}>
+                        <div class="slds-p-around_small">
+                            <h3 class="slds-text-heading_small slds-m-bottom_medium">Box Skills</h3>
+                            
+                            <template if:true={fileSkills.cards}>
+                                <template for:each={fileSkills.cards} for:item="card">
+                                    <div key={card.id} class="slds-box slds-m-bottom_small">
+                                        <h4 class="slds-text-heading_x-small">{card.skill_card_title.message}</h4>
+                                        <div class="slds-m-top_small">
+                                            <!-- Render skill card content based on type -->
+                                            <template if:true={card.entries}>
+                                                <ul class="slds-list_dotted">
+                                                    <template for:each={card.entries} for:item="entry">
+                                                        <li key={entry.text}>{entry.text}</li>
+                                                    </template>
+                                                </ul>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+                            <template if:false={fileSkills.cards}>
+                                <p class="slds-text-body_regular slds-text-color_weak">No skills data available</p>
+                            </template>
+                        </div>
+                    </template>
+                    
+                    <!-- Metadata Tab -->
+                    <template if:true={showMetadataTab}>
+                        <div class="slds-p-around_small">
+                            <h3 class="slds-text-heading_small slds-m-bottom_medium">Metadata</h3>
+                            
+                            <template if:true={fileMetadata.length}>
+                                <template for:each={fileMetadata} for:item="metadata">
+                                    <div key={metadata.$id} class="slds-box slds-m-bottom_small">
+                                        <h4 class="slds-text-heading_x-small">{metadata.$template}</h4>
+                                        <dl class="slds-list_horizontal slds-wrap slds-m-top_small">
+                                            <template for:each={metadata} for:item="field">
+                                                <template if:true={field.key !== '$id' && field.key !== '$template'}>
+                                                    <dt class="slds-item_label slds-text-color_weak">{field.key}:</dt>
+                                                    <dd class="slds-item_detail">{field.value}</dd>
+                                                </template>
+                                            </template>
+                                        </dl>
+                                    </div>
+                                </template>
+                            </template>
+                            <template if:false={fileMetadata.length}>
+                                <p class="slds-text-body_regular slds-text-color_weak">No metadata available</p>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

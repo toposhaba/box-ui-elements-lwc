@@ -1,0 +1,33 @@
+<template>
+    <div class="box-content-preview">
+        <!-- Loading State -->
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-p-around_large">
+                <c-box-loading-indicator size="large"></c-box-loading-indicator>
+            </div>
+        </template>
+        
+        <!-- Error State -->
+        <template if:true={showError}>
+            <div class="slds-illustration slds-illustration_large">
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning-icon 
+                        icon-name="utility:error"
+                        alternative-text="Error"
+                        size="large"
+                        variant="error">
+                    </lightning-icon>
+                    <h3 class="slds-text-heading_medium slds-m-top_medium">
+                        Preview Error
+                    </h3>
+                    <p class="slds-text-body_regular slds-m-top_small">
+                        {error}
+                    </p>
+                </div>
+            </div>
+        </template>
+        
+        <!-- Preview Container -->
+        <div class="box-preview-container" lwc:dom="manual"></div>
+    </div>
+</template>

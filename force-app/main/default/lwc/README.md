@@ -55,19 +55,42 @@ This repository contains Box UI Elements converted from React to Salesforce's Li
 20. **boxRenameModal** - Rename files/folders
 21. **boxPreviewModal** - File preview (placeholder)
 
+### Preview & AI Components
+
+22. **boxContentPreview** - Full Box Preview integration:
+    - Document, image, video, and audio preview
+    - Annotations support
+    - Print and download controls
+    - Thumbnail sidebar for multi-page documents
+    - Keyboard shortcuts
+    - Collection navigation
+
+23. **boxAI** - Box AI integration with three modes:
+    - Ask: Q&A about document content
+    - Summarize: Auto-generate document summaries
+    - Extract: Extract structured data from documents
+
+24. **boxContentSidebar** - Multi-tab sidebar with:
+    - File details and metadata
+    - Activity feed
+    - Version history
+    - Box Skills results
+    - Integrated Box AI tab
+
 ### Services
 
-22. **boxApiService** - Box API integration module providing:
+25. **boxApiService** - Box API integration module providing:
     - Authentication (token, shared link)
     - File operations (upload, download, delete, rename)
     - Folder operations (list, create, navigate)
     - Search functionality
     - SHA1 integrity checking
     - Automatic retry with exponential backoff
+    - Box AI endpoints support
 
 ### Demo
 
-23. **boxUIElementsDemo** - Comprehensive demo showcasing all components
+26. **boxUIElementsDemo** - Comprehensive demo showcasing all components
 
 ## Installation
 
@@ -125,6 +148,51 @@ sfdx force:source:deploy -p force-app
     is-loading={isSaving}
     onbuttonclick={handleSave}>
 </c-box-button>
+```
+
+### Content Preview
+```html
+<c-box-content-preview
+    file-id={fileId}
+    token={boxApiToken}
+    show-annotations={true}
+    can-download={true}
+    can-print={true}
+    enable-thumbnails-sidebar={true}
+    onload={handlePreviewLoad}>
+</c-box-content-preview>
+```
+
+### Box AI - Ask Questions
+```html
+<c-box-a-i
+    token={boxApiToken}
+    file-id={fileId}
+    mode="ask"
+    placeholder="Ask anything about this document..."
+    onresponse={handleAIResponse}>
+</c-box-a-i>
+```
+
+### Box AI - Generate Summary
+```html
+<c-box-a-i
+    token={boxApiToken}
+    file-id={fileId}
+    mode="summarize"
+    onsummary={handleSummary}>
+</c-box-a-i>
+```
+
+### Content Sidebar with AI
+```html
+<c-box-content-sidebar
+    file-id={fileId}
+    token={boxApiToken}
+    show-a-i={true}
+    show-versions={true}
+    default-panel="ai">
+</c-box-content-sidebar>
 ```
 
 ## Box API Integration

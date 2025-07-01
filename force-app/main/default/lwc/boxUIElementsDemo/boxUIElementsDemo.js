@@ -8,6 +8,7 @@ export default class BoxUIElementsDemo extends LightningElement {
     @track showPicker = false;
     @track selectedFiles = [];
     @track boxToken = ''; // Set your Box API token here for testing
+    @track previewFileId = ''; // Set a Box file ID here for preview/AI testing
     
     // Button handlers
     handleButtonClick(event) {
@@ -107,6 +108,30 @@ export default class BoxUIElementsDemo extends LightningElement {
         const items = event.detail.items;
         this.selectedFiles = Array.isArray(items) ? items : [items];
         console.log('Files chosen:', this.selectedFiles);
+        
+        // Set the first selected file as preview file
+        if (this.selectedFiles.length > 0) {
+            this.previewFileId = this.selectedFiles[0].id;
+        }
+        
         this.closePicker();
+    }
+    
+    // Preview handlers
+    handlePreviewLoad(event) {
+        console.log('Preview loaded:', event.detail);
+    }
+    
+    handlePreviewError(event) {
+        console.error('Preview error:', event.detail);
+    }
+    
+    // AI handlers
+    handleAIResponse(event) {
+        console.log('AI Response:', event.detail);
+    }
+    
+    handleAISummary(event) {
+        console.log('AI Summary:', event.detail);
     }
 }

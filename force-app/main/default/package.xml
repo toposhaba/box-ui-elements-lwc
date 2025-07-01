@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
+        <members>boxAI</members>
         <members>boxApiService</members>
         <members>boxButton</members>
         <members>boxCheckbox</members>
         <members>boxCheckboxTooltip</members>
         <members>boxContentExplorer</members>
         <members>boxContentPicker</members>
+        <members>boxContentPreview</members>
+        <members>boxContentSidebar</members>
         <members>boxContentUploader</members>
         <members>boxCreateFolderModal</members>
         <members>boxDeleteModal</members>
