@@ -268,12 +268,174 @@ class BoxApiService {
      * Get folder items
      */
     async getFolderItems(folderId = '0', options = {}) {
-        const { limit = 100, offset = 0 } = options;
-        const url = `${this.getBaseApiUrl()}/folders/${folderId}/items?limit=${limit}&offset=${offset}`;
+        const { limit = 100, offset = 0, fields } = options;
+        let url = `${this.getBaseApiUrl()}/folders/${folderId}/items?limit=${limit}&offset=${offset}`;
+        
+        if (fields) {
+            url += `&fields=${fields}`;
+        }
         
         const response = await fetch(url, {
             method: 'GET',
             headers: this.getHeaders()
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw error;
+        }
+
+        return response.json();
+    }
+
+    /**
+     * Get folder info
+     */
+    async getFolderInfo(folderId) {
+        const url = `${this.getBaseApiUrl()}/folders/${folderId}`;
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: this.getHeaders()
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw error;
+        }
+
+        return response.json();
+    }
+
+    /**
+     * Get recent items
+     */
+    async getRecents(options = {}) {
+        const { limit = 100, fields } = options;
+        let url = `${this.getBaseApiUrl()}/recent_items?limit=${limit}`;
+        
+        if (fields) {
+            url += `&fields=${fields}`;
+        }
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: this.getHeaders()
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw error;
+        }
+
+        return response.json();
+    }
+
+    /**
+     * Search for items
+     */
+    async search(query, options = {}) {
+        const { limit = 100, offset = 0, fields } = options;
+        let url = `${this.getBaseApiUrl()}/search?query=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`;
+        
+        if (fields) {
+            url += `&fields=${fields}`;
+        }
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: this.getHeaders()
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw error;
+        }
+
+        return response.json();
+    }
+
+    /**
+     * Delete an item
+     */
+    async deleteItem(itemId, itemType) {
+        const endpoint = itemType === 'folder' ? 'folders' : 'files';
+        const url = `${this.getBaseApiUrl()}/${endpoint}/${itemId}`;
+        
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: this.getHeaders()
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw error;
+        }
+
+        return true;
+    }
+
+    /**
+     * Rename an item
+     */
+    async renameItem(itemId, itemType, newName) {
+        const endpoint = itemType === 'folder' ? 'folders' : 'files';
+        const url = `${this.getBaseApiUrl()}/${endpoint}/${itemId}`;
+        
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: this.getHeaders(),
+            body: JSON.stringify({ name: newName })
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw error;
+        }
+
+        return response.json();
+    }
+
+    /**
+     * Get download URL for a file
+     */
+    async getDownloadUrl(fileId) {
+        const url = `${this.getBaseApiUrl()}/files/${fileId}/content`;
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: this.getHeaders(),
+            redirect: 'manual'
+        });
+
+        if (response.status === 302) {
+            return response.headers.get('Location');
+        }
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw error;
+        }
+
+        // If no redirect, return the original URL
+        return url;
+    }
+
+    /**
+     * Get shared link for an item
+     */
+    async createSharedLink(itemId, itemType, access = 'open') {
+        const endpoint = itemType === 'folder' ? 'folders' : 'files';
+        const url = `${this.getBaseApiUrl()}/${endpoint}/${itemId}`;
+        
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: this.getHeaders(),
+            body: JSON.stringify({
+                shared_link: {
+                    access: access
+                }
+            })
         });
 
         if (!response.ok) {

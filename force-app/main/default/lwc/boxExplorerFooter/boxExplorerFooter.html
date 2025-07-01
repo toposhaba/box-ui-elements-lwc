@@ -1,0 +1,30 @@
+<template>
+    <div class="slds-p-around_small slds-border_top">
+        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+            <div class="slds-col">
+                <span class="slds-text-body_small">
+                    Showing {startRecord} - {endRecord} of {totalCount} items
+                </span>
+            </div>
+            <div class="slds-col">
+                <div class="slds-button-group" role="group">
+                    <lightning-button-icon
+                        icon-name="utility:chevronleft"
+                        alternative-text="Previous Page"
+                        disabled={!hasPrevious}
+                        onclick={handlePrevious}>
+                    </lightning-button-icon>
+                    <span class="slds-p-horizontal_small slds-text-body_small">
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <lightning-button-icon
+                        icon-name="utility:chevronright"
+                        alternative-text="Next Page"
+                        disabled={!hasNext}
+                        onclick={handleNext}>
+                    </lightning-button-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

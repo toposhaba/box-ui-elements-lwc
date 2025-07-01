@@ -1,0 +1,73 @@
+<template>
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name="utility:folder" alternative-text="Folder"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate">{currentFolderName}</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        <lightning-input
+                            type="search"
+                            label="Search"
+                            placeholder="Search files and folders"
+                            value={searchQuery}
+                            onchange={handleSearch}
+                            variant="label-hidden">
+                        </lightning-input>
+                    </div>
+                    <div class="slds-page-header__control">
+                        <lightning-button-group>
+                            <lightning-button-icon
+                                icon-name="utility:list"
+                                alternative-text="List View"
+                                variant={isListView ? 'brand' : 'neutral'}
+                                data-mode="list"
+                                onclick={handleViewModeChange}>
+                            </lightning-button-icon>
+                            <lightning-button-icon
+                                icon-name="utility:apps"
+                                alternative-text="Grid View"
+                                variant={isGridView ? 'brand' : 'neutral'}
+                                data-mode="grid"
+                                onclick={handleViewModeChange}>
+                            </lightning-button-icon>
+                        </lightning-button-group>
+                    </div>
+                    <template if:true={canCreateNewFolder}>
+                        <div class="slds-page-header__control">
+                            <lightning-button
+                                label="New Folder"
+                                icon-name="utility:folder"
+                                onclick={handleCreateFolder}>
+                            </lightning-button>
+                        </div>
+                    </template>
+                    <template if:true={canUpload}>
+                        <div class="slds-page-header__control">
+                            <lightning-button
+                                variant="brand"
+                                label="Upload"
+                                icon-name="utility:upload"
+                                onclick={handleUpload}>
+                            </lightning-button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

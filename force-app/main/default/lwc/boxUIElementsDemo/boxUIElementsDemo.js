@@ -5,6 +5,9 @@ export default class BoxUIElementsDemo extends LightningElement {
     @track isLoading = false;
     @track checkboxValue = false;
     @track showRadarAnimation = false;
+    @track showPicker = false;
+    @track selectedFiles = [];
+    @track boxToken = ''; // Set your Box API token here for testing
     
     // Button handlers
     handleButtonClick(event) {
@@ -60,5 +63,50 @@ export default class BoxUIElementsDemo extends LightningElement {
     handleUploadError(event) {
         const { item, error } = event.detail;
         console.error('Upload error:', item, error);
+    }
+    
+    // Content Explorer handlers
+    handleNavigate(event) {
+        console.log('Navigate:', event.detail);
+    }
+    
+    handleSelect(event) {
+        console.log('Select:', event.detail);
+    }
+    
+    handleCreate(event) {
+        console.log('Create:', event.detail);
+    }
+    
+    handleDelete(event) {
+        console.log('Delete:', event.detail);
+    }
+    
+    handleRename(event) {
+        console.log('Rename:', event.detail);
+    }
+    
+    handleDownload(event) {
+        console.log('Download:', event.detail);
+    }
+    
+    handleUpload(event) {
+        console.log('Upload:', event.detail);
+    }
+    
+    // Content Picker handlers
+    openPicker() {
+        this.showPicker = true;
+    }
+    
+    closePicker() {
+        this.showPicker = false;
+    }
+    
+    handleChoose(event) {
+        const items = event.detail.items;
+        this.selectedFiles = Array.isArray(items) ? items : [items];
+        console.log('Files chosen:', this.selectedFiles);
+        this.closePicker();
     }
 }

@@ -1,0 +1,24 @@
+<template>
+    <c-box-content-explorer
+        token={token}
+        api-host={apiHost}
+        root-folder-id={rootFolderId}
+        shared-link={sharedLink}
+        shared-link-password={sharedLinkPassword}
+        is-picker-mode={true}
+        can-select-multiple={canSelectMultiple}
+        allowed-extensions={extensions}
+        default-view={defaultView}
+        can-download={false}
+        can-delete={false}
+        can-rename={false}
+        can-share={false}
+        can-preview={true}
+        can-upload={false}
+        can-create-new-folder={false}
+        onchoose={handleChoose}
+        oncancel={handleCancel}
+        onnavigate={handleNavigate}
+        onselect={handleSelect}>
+    </c-box-content-explorer>
+</template>

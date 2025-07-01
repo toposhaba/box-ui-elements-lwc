@@ -5,10 +5,21 @@
         <members>boxButton</members>
         <members>boxCheckbox</members>
         <members>boxCheckboxTooltip</members>
+        <members>boxContentExplorer</members>
+        <members>boxContentPicker</members>
         <members>boxContentUploader</members>
+        <members>boxCreateFolderModal</members>
+        <members>boxDeleteModal</members>
+        <members>boxExplorerBreadcrumbs</members>
+        <members>boxExplorerFooter</members>
+        <members>boxExplorerGrid</members>
+        <members>boxExplorerHeader</members>
+        <members>boxExplorerList</members>
         <members>boxLoadingIndicator</members>
         <members>boxModal</members>
+        <members>boxPreviewModal</members>
         <members>boxRadarAnimation</members>
+        <members>boxRenameModal</members>
         <members>boxUIElementsDemo</members>
         <members>boxUploadItem</members>
         <members>boxUploadItemList</members>

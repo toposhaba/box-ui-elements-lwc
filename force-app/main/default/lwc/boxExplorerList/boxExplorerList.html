@@ -1,0 +1,17 @@
+<template>
+    <div class="box-explorer-list">
+        <lightning-datatable
+            key-field="id"
+            data={formattedItems}
+            columns={columns}
+            sorted-by={sortBy}
+            sorted-direction={sortDirection}
+            selected-rows={selectedItemIds}
+            hide-checkbox-column={!isPickerMode}
+            onrowaction={handleRowAction}
+            onrowselection={handleRowSelection}
+            onsort={handleSort}
+            min-column-width="50">
+        </lightning-datatable>
+    </div>
+</template>
