@@ -1,0 +1,20 @@
+<template>
+    <nav class="slds-breadcrumb slds-breadcrumb_list" role="navigation" aria-label="Breadcrumbs">
+        <ol class="slds-breadcrumb__list">
+            <template for:each={breadcrumbItems} for:item="crumb">
+                <li class="slds-breadcrumb__item" key={crumb.id}>
+                    <template if:false={crumb.isLast}>
+                        <a href="#" 
+                           data-folder-id={crumb.id} 
+                           onclick={handleBreadcrumbClick}>
+                            {crumb.name}
+                        </a>
+                    </template>
+                    <template if:true={crumb.isLast}>
+                        <span>{crumb.name}</span>
+                    </template>
+                </li>
+            </template>
+        </ol>
+    </nav>
+</template>

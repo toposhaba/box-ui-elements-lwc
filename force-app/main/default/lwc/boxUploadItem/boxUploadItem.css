@@ -1,0 +1,46 @@
+/* Upload Item Container */
+.bcu-upload-item {
+    background-color: #ffffff;
+    transition: background-color 0.2s ease;
+}
+
+.bcu-upload-item:hover {
+    background-color: #f8f8f8;
+}
+
+/* Status Variations */
+.bcu-upload-item.bcu-status-complete {
+    opacity: 0.8;
+}
+
+.bcu-upload-item.bcu-status-error {
+    background-color: #fef5f5;
+}
+
+.bcu-upload-item.bcu-status-error:hover {
+    background-color: #fef0f0;
+}
+
+/* Progress Bar */
+.bcu-progress-container {
+    width: 100%;
+}
+
+.bcu-progress-bar {
+    height: 4px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.bcu-progress-fill {
+    height: 100%;
+    background-color: #0061d5;
+    transition: width 0.3s ease;
+}
+
+/* Item Actions */
+.bcu-item-actions {
+    display: flex;
+    gap: 4px;
+}

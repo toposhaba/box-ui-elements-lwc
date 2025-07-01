@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage,lightningCommunity__Default">
+            <property name="fileId" type="String" label="File ID" description="Box file ID to preview"/>
+            <property name="token" type="String" label="Box API Token" description="Box API access token for authentication"/>
+            <property name="showAnnotations" type="Boolean" label="Show Annotations" default="false" description="Enable annotations on the preview"/>
+            <property name="showAnnotationsControls" type="Boolean" label="Show Annotation Controls" default="false" description="Show annotation drawing controls"/>
+            <property name="canDownload" type="Boolean" label="Can Download" default="true" description="Allow downloading the file"/>
+            <property name="canPrint" type="Boolean" label="Can Print" default="true" description="Allow printing the file"/>
+            <property name="showDownload" type="Boolean" label="Show Download Button" default="true" description="Show the download button"/>
+            <property name="showPrint" type="Boolean" label="Show Print Button" default="true" description="Show the print button"/>
+            <property name="enableThumbnailsSidebar" type="Boolean" label="Enable Thumbnails" default="false" description="Enable thumbnail sidebar for multi-page documents"/>
+            <property name="header" type="String" label="Header Style" datasource="light,dark,none" default="light" description="Header style for the preview"/>
+            <property name="useHotkeys" type="Boolean" label="Use Hotkeys" default="true" description="Enable keyboard shortcuts"/>
+            <property name="locale" type="String" label="Locale" default="en-US" description="Locale for the preview interface"/>
+            <property name="apiHost" type="String" label="API Host" description="Box API host URL"/>
+            <property name="staticHost" type="String" label="Static Host" default="https://cdn01.boxcdn.net" description="Box static content host"/>
+            <property name="previewVersion" type="String" label="Preview Version" default="2.89.0" description="Box Preview library version"/>
+            <property name="sharedLink" type="String" label="Shared Link" description="Box shared link for accessing content"/>
+            <property name="sharedLinkPassword" type="String" label="Shared Link Password" description="Password for the shared link"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

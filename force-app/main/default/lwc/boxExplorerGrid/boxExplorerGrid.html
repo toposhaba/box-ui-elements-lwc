@@ -1,0 +1,64 @@
+<template>
+    <div class="box-explorer-grid slds-grid slds-wrap slds-grid_pull-padded">
+        <template for:each={formattedItems} for:item="item">
+            <div key={item.id} class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-large-size_1-of-6 slds-p-around_small">
+                <div class="grid-item slds-box slds-box_x-small slds-theme_shade slds-text-align_center"
+                     data-item-id={item.id}
+                     onclick={handleItemClick}>
+                    
+                    <!-- Selection checkbox for picker mode -->
+                    <template if:true={isPickerMode}>
+                        <div class="slds-m-bottom_x-small">
+                            <input type="checkbox" 
+                                   checked={item.isSelected}
+                                   class="slds-checkbox" />
+                        </div>
+                    </template>
+                    
+                    <!-- Icon or Thumbnail -->
+                    <div class="slds-m-bottom_small">
+                        <template if:true={item.thumbnailUrl}>
+                            <img src={item.thumbnailUrl} 
+                                 alt={item.name}
+                                 class="thumbnail" />
+                        </template>
+                        <template if:false={item.thumbnailUrl}>
+                            <lightning-icon 
+                                icon-name={item.iconName}
+                                size="large"
+                                alternative-text={item.type}>
+                            </lightning-icon>
+                        </template>
+                    </div>
+                    
+                    <!-- Item Name -->
+                    <div class="slds-truncate slds-text-body_small" title={item.name}>
+                        {item.name}
+                    </div>
+                    
+                    <!-- Actions (non-picker mode) -->
+                    <template if:false={isPickerMode}>
+                        <div class="item-actions slds-m-top_x-small">
+                            <lightning-button-icon
+                                icon-name="utility:download"
+                                alternative-text="Download"
+                                size="x-small"
+                                data-action="download"
+                                data-item-id={item.id}
+                                onclick={handleItemAction}>
+                            </lightning-button-icon>
+                            <lightning-button-icon
+                                icon-name="utility:preview"
+                                alternative-text="Preview"
+                                size="x-small"
+                                data-action="preview"
+                                data-item-id={item.id}
+                                onclick={handleItemAction}>
+                            </lightning-button-icon>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

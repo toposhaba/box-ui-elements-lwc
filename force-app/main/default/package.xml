@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>boxAI</members>
+        <members>boxApiService</members>
+        <members>boxButton</members>
+        <members>boxCheckbox</members>
+        <members>boxCheckboxTooltip</members>
+        <members>boxContentExplorer</members>
+        <members>boxContentPicker</members>
+        <members>boxContentPreview</members>
+        <members>boxContentSidebar</members>
+        <members>boxContentUploader</members>
+        <members>boxCreateFolderModal</members>
+        <members>boxDeleteModal</members>
+        <members>boxExplorerBreadcrumbs</members>
+        <members>boxExplorerFooter</members>
+        <members>boxExplorerGrid</members>
+        <members>boxExplorerHeader</members>
+        <members>boxExplorerList</members>
+        <members>boxLoadingIndicator</members>
+        <members>boxModal</members>
+        <members>boxPreviewModal</members>
+        <members>boxRadarAnimation</members>
+        <members>boxRenameModal</members>
+        <members>boxUIElementsDemo</members>
+        <members>boxUploadItem</members>
+        <members>boxUploadItemList</members>
+        <members>boxUploadsManager</members>
+        <members>boxUploadState</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <version>59.0</version>
+</Package>

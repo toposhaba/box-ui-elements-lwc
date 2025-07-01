@@ -1,0 +1,180 @@
+<template>
+    <div class="box-content-explorer">
+        <!-- Header -->
+        <c-box-explorer-header
+            current-folder-name={currentFolderName}
+            can-create-new-folder={canCreateNewFolder}
+            can-upload={canUpload}
+            search-query={searchQuery}
+            view-mode={viewMode}
+            onsearch={handleSearchInput}
+            onviewmodechange={handleViewModeChange}
+            oncreatefolder={showCreateFolderModal}
+            onupload={showUploadModal}>
+        </c-box-explorer-header>
+        
+        <!-- Breadcrumbs -->
+        <c-box-explorer-breadcrumbs
+            breadcrumbs={breadcrumbs}
+            onnavigate={handleBreadcrumbClick}>
+        </c-box-explorer-breadcrumbs>
+        
+        <!-- Loading -->
+        <template if:true={isLoading}>
+            <div class="slds-align_absolute-center slds-p-around_large">
+                <c-box-loading-indicator size="large"></c-box-loading-indicator>
+            </div>
+        </template>
+        
+        <!-- Error -->
+        <template if:true={showError}>
+            <div class="slds-illustration slds-illustration_large">
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning-icon 
+                        icon-name="utility:error"
+                        alternative-text="Error"
+                        size="large"
+                        variant="error">
+                    </lightning-icon>
+                    <h3 class="slds-text-heading_medium slds-m-top_medium">
+                        Error Loading Content
+                    </h3>
+                    <p class="slds-text-body_regular slds-m-top_small">
+                        {errorMessage}
+                    </p>
+                </div>
+            </div>
+        </template>
+        
+        <!-- Content -->
+        <template if:true={showContent}>
+            <template if:true={hasItems}>
+                <!-- List View -->
+                <template if:true={isListView}>
+                    <c-box-explorer-list
+                        items={items}
+                        selected-items={selectedItems}
+                        is-picker-mode={isPickerMode}
+                        can-preview={canPreview}
+                        can-download={canDownload}
+                        can-delete={canDelete}
+                        can-rename={canRename}
+                        can-share={canShare}
+                        sort-by={sortBy}
+                        sort-direction={sortDirection}
+                        onitemclick={handleItemClick}
+                        onitemaction={handleItemAction}
+                        onsort={handleSort}>
+                    </c-box-explorer-list>
+                </template>
+                
+                <!-- Grid View -->
+                <template if:true={isGridView}>
+                    <c-box-explorer-grid
+                        items={items}
+                        selected-items={selectedItems}
+                        is-picker-mode={isPickerMode}
+                        onitemclick={handleItemClick}
+                        onitemaction={handleItemAction}>
+                    </c-box-explorer-grid>
+                </template>
+            </template>
+            
+            <!-- Empty State -->
+            <template if:false={hasItems}>
+                <div class="slds-illustration slds-illustration_small">
+                    <div class="slds-text-align_center slds-p-around_large">
+                        <lightning-icon 
+                            icon-name="utility:open_folder"
+                            alternative-text="Empty folder"
+                            size="large">
+                        </lightning-icon>
+                        <h3 class="slds-text-heading_medium slds-m-top_medium">
+                            This folder is empty
+                        </h3>
+                        <template if:true={canUpload}>
+                            <p class="slds-text-body_regular slds-m-top_small">
+                                Drop files here or click the upload button to add content
+                            </p>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </template>
+        
+        <!-- Footer with Pagination -->
+        <template if:true={hasItems}>
+            <c-box-explorer-footer
+                current-offset={currentOffset}
+                page-size={pageSize}
+                total-count={totalCount}
+                has-more={hasMore}
+                onpagechange={handlePageChange}>
+            </c-box-explorer-footer>
+        </template>
+        
+        <!-- Picker Mode Footer -->
+        <template if:true={isPickerMode}>
+            <div class="slds-docked-form-footer">
+                <div class="slds-grid slds-grid_align-spread">
+                    <div class="slds-col">
+                        <span class="slds-text-body_small">
+                            {selectionCount} item(s) selected
+                        </span>
+                    </div>
+                    <div class="slds-col">
+                        <lightning-button
+                            label="Cancel"
+                            onclick={handleCancel}
+                            class="slds-m-right_small">
+                        </lightning-button>
+                        <lightning-button
+                            variant="brand"
+                            label="Choose"
+                            disabled={!hasSelection}
+                            onclick={handleChoose}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </div>
+        </template>
+        
+        <!-- Modals -->
+        <c-box-create-folder-modal
+            is-open={isCreateFolderModalOpen}
+            onclose={hideCreateFolderModal}
+            oncreate={handleCreateFolder}>
+        </c-box-create-folder-modal>
+        
+        <c-box-delete-modal
+            is-open={isDeleteModalOpen}
+            item={selectedItem}
+            onclose={hideDeleteModal}
+            ondelete={handleDelete}>
+        </c-box-delete-modal>
+        
+        <c-box-rename-modal
+            is-open={isRenameModalOpen}
+            item={selectedItem}
+            onclose={hideRenameModal}
+            onrename={handleRename}>
+        </c-box-rename-modal>
+        
+        <template if:true={isPreviewModalOpen}>
+            <c-box-preview-modal
+                is-open={isPreviewModalOpen}
+                item={selectedItem}
+                token={token}
+                onclose={hidePreviewModal}>
+            </c-box-preview-modal>
+        </template>
+        
+        <c-box-content-uploader
+            is-open={isUploadModalOpen}
+            token={token}
+            folder-id={getCurrentFolderId}
+            onclose={hideUploadModal}
+            onsuccess={handleUploadSuccess}>
+        </c-box-content-uploader>
+    </div>
+</template>

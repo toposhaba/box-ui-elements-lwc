@@ -1,0 +1,64 @@
+<template>
+    <div class={containerClass}>
+        <template if:true={showContent}>
+            <!-- Droppable Content Area -->
+            <div class={droppableClass}
+                 ondragenter={handleDragEnter}
+                 ondragover={handleDragOver}
+                 ondragleave={handleDragLeave}
+                 ondrop={handleDrop}>
+                
+                <!-- Upload State -->
+                <template if:false={hasItems}>
+                    <c-box-upload-state
+                        view={view}
+                        can-drop={canDrop}
+                        is-over={isOver}
+                        is-folder-upload-enabled={isFolderUploadEnabled}
+                        accepted-file-types={acceptedFileTypes}
+                        onfileselect={handleFileSelect}>
+                    </c-box-upload-state>
+                </template>
+                
+                <!-- Item List -->
+                <template if:true={hasItems}>
+                    <c-box-upload-item-list
+                        items={items}
+                        onitemaction={handleItemAction}>
+                    </c-box-upload-item-list>
+                </template>
+            </div>
+            
+            <!-- Uploads Manager -->
+            <template if:true={useUploadsManager}>
+                <c-box-uploads-manager
+                    items={items}
+                    is-expanded={isUploadsManagerExpanded}
+                    is-visible={hasItems}
+                    total-progress={totalProgress}
+                    view={view}
+                    ontoggle={toggleUploadsManager}
+                    onitemaction={handleItemAction}>
+                </c-box-uploads-manager>
+            </template>
+        </template>
+        
+        <!-- Error State -->
+        <template if:false={showContent}>
+            <div class="bcu-error-state">
+                <lightning-icon 
+                    icon-name="utility:error"
+                    alternative-text="Error"
+                    size="large"
+                    variant="error">
+                </lightning-icon>
+                <p class="slds-text-heading_medium slds-m-top_medium">
+                    Upload Error
+                </p>
+                <p class="slds-text-body_regular slds-m-top_small">
+                    An error occurred while initializing the uploader.
+                </p>
+            </div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,44 @@
+.box-content-sidebar {
+    height: 100%;
+    min-height: 400px;
+    background-color: #ffffff;
+    border-left: 1px solid #e0e0e0;
+}
+
+.slds-tabs_default__content {
+    padding: 0;
+}
+
+.slds-tabs_default__nav {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.slds-tabs_default__link {
+    display: flex;
+    align-items: center;
+}
+
+/* Scrollable content areas */
+.slds-scrollable_y {
+    overflow-y: auto;
+}
+
+/* Timeline styling */
+.slds-timeline {
+    position: relative;
+}
+
+.slds-timeline__item_expandable {
+    padding: 0.5rem 0;
+}
+
+/* Metadata display */
+.slds-list_horizontal dt {
+    width: 40%;
+    font-weight: 600;
+}
+
+.slds-list_horizontal dd {
+    width: 60%;
+    margin-left: 0;
+}

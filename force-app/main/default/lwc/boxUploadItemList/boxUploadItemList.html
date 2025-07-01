@@ -1,0 +1,23 @@
+<template>
+    <div class="bcu-upload-item-list">
+        <template if:true={hasItems}>
+            <ul class="slds-has-dividers_bottom">
+                <template for:each={items} for:item="item">
+                    <li key={item.id} class="slds-item">
+                        <c-box-upload-item
+                            item={item}
+                            onitemaction={handleItemAction}>
+                        </c-box-upload-item>
+                    </li>
+                </template>
+            </ul>
+        </template>
+        <template if:false={hasItems}>
+            <div class="slds-text-align_center slds-p-around_large">
+                <p class="slds-text-body_regular slds-text-color_weak">
+                    No files to display
+                </p>
+            </div>
+        </template>
+    </div>
+</template>

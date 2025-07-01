@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage,lightningCommunity__Default">
+            <property name="fileId" type="String" label="File ID" description="Box file ID" required="true"/>
+            <property name="token" type="String" label="Box API Token" description="Box API access token" required="true"/>
+            <property name="showActivityFeed" type="Boolean" label="Show Activity Feed" default="true" description="Show the activity feed tab"/>
+            <property name="showDetails" type="Boolean" label="Show Details" default="true" description="Show the details tab"/>
+            <property name="showSkills" type="Boolean" label="Show Skills" default="true" description="Show the Box Skills tab"/>
+            <property name="showMetadata" type="Boolean" label="Show Metadata" default="true" description="Show the metadata tab"/>
+            <property name="showVersions" type="Boolean" label="Show Versions" default="true" description="Show the versions tab"/>
+            <property name="showAI" type="Boolean" label="Show Box AI" default="true" description="Show the Box AI tab"/>
+            <property name="defaultPanel" type="String" label="Default Panel" datasource="details,activity,ai,versions,skills,metadata" default="details" description="Default tab to show"/>
+            <property name="apiHost" type="String" label="API Host" description="Box API host URL"/>
+            <property name="sharedLink" type="String" label="Shared Link" description="Box shared link"/>
+            <property name="sharedLinkPassword" type="String" label="Shared Link Password" description="Password for shared link"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

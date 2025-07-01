@@ -1,0 +1,10 @@
+.checkbox-tooltip-wrapper {
+    display: inline-flex;
+    align-items: center;
+}
+
+.info-tooltip {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 4px;
+}

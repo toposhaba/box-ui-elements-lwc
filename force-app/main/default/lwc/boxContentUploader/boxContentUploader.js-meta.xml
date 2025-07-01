@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage,lightningCommunity__Default">
+            <property name="fileLimit" type="Integer" label="File Limit" default="100" min="1" max="500" description="Maximum number of files that can be uploaded at once"/>
+            <property name="rootFolderId" type="String" label="Root Folder ID" default="0" description="The ID of the folder where files will be uploaded"/>
+            <property name="isLarge" type="Boolean" label="Large Size" default="false" description="Use large size variant"/>
+            <property name="isSmall" type="Boolean" label="Small Size" default="false" description="Use small size variant"/>
+            <property name="isFolderUploadEnabled" type="Boolean" label="Enable Folder Upload" default="false" description="Allow uploading entire folders"/>
+            <property name="useUploadsManager" type="Boolean" label="Use Uploads Manager" default="false" description="Show uploads manager for tracking multiple uploads"/>
+            <property name="allowedExtensions" type="String" label="Allowed File Extensions" description="Comma-separated list of allowed file extensions (e.g., jpg,png,pdf)"/>
+            <property name="token" type="String" label="Box API Token" description="Box API access token for authentication"/>
+            <property name="apiHost" type="String" label="API Host" description="Box API host URL (defaults to https://api.box.com)"/>
+            <property name="uploadHost" type="String" label="Upload Host" description="Box upload host URL (defaults to https://upload.box.com)"/>
+            <property name="sharedLink" type="String" label="Shared Link" description="Box shared link for accessing content"/>
+            <property name="sharedLinkPassword" type="String" label="Shared Link Password" description="Password for the shared link"/>
+            <property name="overwrite" type="Boolean" label="Overwrite Files" default="true" description="Whether to overwrite files with the same name"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

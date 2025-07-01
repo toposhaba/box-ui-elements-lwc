@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage,lightningCommunity__Default">
+            <property name="token" type="String" label="Box API Token" description="Box API access token for authentication"/>
+            <property name="rootFolderId" type="String" label="Root Folder ID" default="0" description="The ID of the root folder to display"/>
+            <property name="defaultView" type="String" label="Default View" datasource="files,recents,search" default="files" description="Default view to show on load"/>
+            <property name="canDownload" type="Boolean" label="Can Download" default="true" description="Allow downloading files"/>
+            <property name="canDelete" type="Boolean" label="Can Delete" default="true" description="Allow deleting files and folders"/>
+            <property name="canRename" type="Boolean" label="Can Rename" default="true" description="Allow renaming files and folders"/>
+            <property name="canShare" type="Boolean" label="Can Share" default="true" description="Allow sharing files"/>
+            <property name="canPreview" type="Boolean" label="Can Preview" default="true" description="Allow previewing files"/>
+            <property name="canUpload" type="Boolean" label="Can Upload" default="true" description="Allow uploading files"/>
+            <property name="canCreateNewFolder" type="Boolean" label="Can Create Folders" default="true" description="Allow creating new folders"/>
+            <property name="isPickerMode" type="Boolean" label="Picker Mode" default="false" description="Enable file picker mode"/>
+            <property name="canSelectMultiple" type="Boolean" label="Multiple Selection" default="false" description="Allow selecting multiple items in picker mode"/>
+            <property name="pageSize" type="Integer" label="Page Size" default="50" min="10" max="100" description="Number of items per page"/>
+            <property name="apiHost" type="String" label="API Host" description="Box API host URL"/>
+            <property name="sharedLink" type="String" label="Shared Link" description="Box shared link for accessing content"/>
+            <property name="sharedLinkPassword" type="String" label="Shared Link Password" description="Password for the shared link"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

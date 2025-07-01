@@ -1,0 +1,42 @@
+<template>
+    <div class={stateClass}>
+        <div class="bcu-upload-state-content">
+            <!-- Icon -->
+            <div class="bcu-upload-state-icon">
+                <lightning-icon 
+                    icon-name={iconName}
+                    alternative-text={headingText}
+                    size="large"
+                    variant={iconVariant}>
+                </lightning-icon>
+            </div>
+            
+            <!-- Text Content -->
+            <h2 class="slds-text-heading_medium slds-m-top_medium">
+                {headingText}
+            </h2>
+            <p class="slds-text-body_regular slds-m-top_small slds-m-bottom_medium">
+                {subheadingText}
+            </p>
+            
+            <!-- Upload Button -->
+            <template if:true={showUploadButton}>
+                <lightning-button
+                    variant="brand"
+                    label={uploadButtonLabel}
+                    title={uploadButtonLabel}
+                    onclick={handleFileSelect}
+                    class="slds-m-top_medium">
+                </lightning-button>
+            </template>
+            
+            <!-- Hidden File Input -->
+            <input type="file"
+                   accept={acceptedFileTypes}
+                   multiple
+                   onchange={handleFileChange}
+                   style="display: none;"
+                   webkitdirectory={isFolderUploadEnabled} />
+        </div>
+    </div>
+</template>
