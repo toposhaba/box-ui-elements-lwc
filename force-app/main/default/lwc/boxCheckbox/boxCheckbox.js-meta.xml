@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__AppPage,lightning__RecordPage,lightning__HomePage,lightningCommunity__Default">
+            <property name="label" type="String" label="Checkbox Label" description="Label displayed for the checkbox"/>
+            <property name="name" type="String" label="Name" description="Name attribute for the checkbox input"/>
+            <property name="value" type="String" label="Value" description="Value attribute for the checkbox"/>
+            <property name="isChecked" type="Boolean" label="Checked" default="false" description="Whether the checkbox is checked"/>
+            <property name="isDisabled" type="Boolean" label="Disabled" default="false" description="Whether the checkbox is disabled"/>
+            <property name="fieldLabel" type="String" label="Field Label" description="Label shown above the checkbox"/>
+            <property name="description" type="String" label="Description" description="Description text shown below the checkbox"/>
+            <property name="tooltip" type="String" label="Tooltip" description="Tooltip text shown next to the label"/>
+            <property name="hideLabel" type="Boolean" label="Hide Label" default="false" description="Whether to hide the checkbox label"/>
+            <property name="className" type="String" label="CSS Class" description="Additional CSS classes"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

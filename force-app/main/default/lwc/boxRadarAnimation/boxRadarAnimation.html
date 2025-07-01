@@ -1,0 +1,11 @@
+<template>
+    <div class="radar-animation-wrapper">
+        <slot></slot>
+        <template if:true={showRadar}>
+            <div class={radarClass} id={radarAnimationId}>
+                <div class="radar-dot"></div>
+                <div class="radar-circle"></div>
+            </div>
+        </template>
+    </div>
+</template>

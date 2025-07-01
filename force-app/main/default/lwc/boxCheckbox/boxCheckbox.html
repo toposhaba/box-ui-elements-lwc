@@ -1,0 +1,44 @@
+<template>
+    <div class={containerClass}>
+        <template if:true={fieldLabel}>
+            <div class="label">{fieldLabel}</div>
+        </template>
+        
+        <span class="checkbox-label">
+            <input
+                type="checkbox"
+                id={inputId}
+                class={inputClassName}
+                name={name}
+                value={value}
+                checked={isChecked}
+                disabled={isDisabled}
+                aria-describedby={ariaDescribedBy}
+                onchange={handleChange}
+                onfocus={handleFocus}
+                onblur={handleBlur}
+            />
+            <span class="checkbox-pointer-target"></span>
+            <span class={labelClass}>
+                <template if:true={label}>
+                    <label for={inputId}>{label}</label>
+                </template>
+                <template if:true={tooltip}>
+                    <c-box-checkbox-tooltip tooltip={tooltip}></c-box-checkbox-tooltip>
+                </template>
+            </span>
+        </span>
+        
+        <template if:true={description}>
+            <div id={descriptionId} class="checkbox-description">
+                {description}
+            </div>
+        </template>
+        
+        <template if:true={subsection}>
+            <div class="checkbox-subsection">
+                {subsection}
+            </div>
+        </template>
+    </div>
+</template>

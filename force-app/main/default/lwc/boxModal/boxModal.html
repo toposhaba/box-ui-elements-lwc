@@ -1,0 +1,48 @@
+<template>
+    <template if:true={showModal}>
+        <section role="dialog" 
+                 tabindex="-1" 
+                 aria-modal="true"
+                 aria-labelledby="modal-heading-01"
+                 class={modalClass}
+                 onkeydown={handleKeyDown}>
+            <div class="slds-modal__container">
+                <!-- Modal Header -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close"
+                            onclick={handleRequestClose}>
+                        <lightning-icon icon-name="utility:close"
+                                      alternative-text="Close"
+                                      size="small"
+                                      variant="inverse">
+                        </lightning-icon>
+                    </button>
+                    <template if:true={title}>
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+                            {title}
+                        </h2>
+                    </template>
+                </header>
+                
+                <!-- Modal Body -->
+                <div class="slds-modal__content">
+                    <template if:true={isLoading}>
+                        <div class="slds-align_absolute-center slds-p-around_large">
+                            <c-box-loading-indicator size="large"></c-box-loading-indicator>
+                        </div>
+                    </template>
+                    <template if:false={isLoading}>
+                        <slot></slot>
+                    </template>
+                </div>
+                
+                <!-- Modal Footer -->
+                <footer class="slds-modal__footer">
+                    <slot name="footer"></slot>
+                </footer>
+            </div>
+        </section>
+        <div class={backdropClass} onclick={handleBackdropClick}></div>
+    </template>
+</template>

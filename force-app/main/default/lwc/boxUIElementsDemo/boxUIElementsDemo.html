@@ -1,0 +1,173 @@
+<template>
+    <lightning-card title="Box UI Elements Demo" icon-name="custom:custom19">
+        <div class="slds-p-horizontal_medium">
+            
+            <!-- Button Examples -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">Button Examples</h3>
+                
+                <div class="slds-m-bottom_small">
+                    <c-box-button 
+                        label="Primary Button" 
+                        type="button"
+                        onbuttonclick={handleButtonClick}>
+                    </c-box-button>
+                    
+                    <c-box-button 
+                        label="Button with Icon" 
+                        type="button"
+                        icon-name="utility:save"
+                        class-name="slds-m-left_small"
+                        onbuttonclick={handleButtonClick}>
+                    </c-box-button>
+                    
+                    <c-box-button 
+                        label="Large Button" 
+                        type="button"
+                        size="large"
+                        class-name="slds-m-left_small"
+                        onbuttonclick={handleButtonClick}>
+                    </c-box-button>
+                    
+                    <c-box-button 
+                        label="Disabled Button" 
+                        type="button"
+                        is-disabled={true}
+                        class-name="slds-m-left_small"
+                        onbuttonclick={handleButtonClick}>
+                    </c-box-button>
+                </div>
+                
+                <div class="slds-m-bottom_small">
+                    <c-box-button 
+                        label="Loading Demo" 
+                        type="button"
+                        is-loading={isLoading}
+                        onbuttonclick={handleLoadingDemo}>
+                    </c-box-button>
+                    
+                    <c-box-button 
+                        label="With Radar Animation" 
+                        type="button"
+                        show-radar={showRadarAnimation}
+                        class-name="slds-m-left_small"
+                        onbuttonclick={handleButtonClick}>
+                    </c-box-button>
+                </div>
+            </div>
+            
+            <!-- Checkbox Examples -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">Checkbox Examples</h3>
+                
+                <c-box-checkbox
+                    label="Basic Checkbox"
+                    name="basic"
+                    value="basic"
+                    is-checked={checkboxValue}
+                    oncheckboxchange={handleCheckboxChange}>
+                </c-box-checkbox>
+                
+                <c-box-checkbox
+                    label="Checkbox with Description"
+                    name="withDesc"
+                    value="withDesc"
+                    description="This checkbox has a helpful description below it"
+                    oncheckboxchange={handleCheckboxChange}>
+                </c-box-checkbox>
+                
+                <c-box-checkbox
+                    field-label="Field Label Example"
+                    label="Checkbox with Field Label"
+                    name="fieldLabel"
+                    value="fieldLabel"
+                    tooltip="This is a helpful tooltip"
+                    oncheckboxchange={handleCheckboxChange}>
+                </c-box-checkbox>
+                
+                <c-box-checkbox
+                    label="Disabled Checkbox"
+                    name="disabled"
+                    value="disabled"
+                    is-disabled={true}
+                    is-checked={true}
+                    oncheckboxchange={handleCheckboxChange}>
+                </c-box-checkbox>
+            </div>
+            
+            <!-- Loading Indicator Examples -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">Loading Indicator Examples</h3>
+                
+                <div class="slds-grid slds-grid_align-center slds-grid_vertical-align-center slds-wrap">
+                    <div class="slds-col slds-size_1-of-4 slds-text-align_center slds-p-around_small">
+                        <p class="slds-m-bottom_x-small">Small</p>
+                        <c-box-loading-indicator size="small"></c-box-loading-indicator>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4 slds-text-align_center slds-p-around_small">
+                        <p class="slds-m-bottom_x-small">Medium</p>
+                        <c-box-loading-indicator size="medium"></c-box-loading-indicator>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4 slds-text-align_center slds-p-around_small">
+                        <p class="slds-m-bottom_x-small">Default</p>
+                        <c-box-loading-indicator></c-box-loading-indicator>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4 slds-text-align_center slds-p-around_small">
+                        <p class="slds-m-bottom_x-small">Large</p>
+                        <c-box-loading-indicator size="large"></c-box-loading-indicator>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Example -->
+            <div class="slds-m-bottom_large">
+                <h3 class="slds-text-heading_small slds-m-bottom_medium">Modal Example</h3>
+                
+                <c-box-button 
+                    label="Open Modal" 
+                    type="button"
+                    icon-name="utility:preview"
+                    onbuttonclick={handleOpenModal}>
+                </c-box-button>
+            </div>
+            
+        </div>
+    </lightning-card>
+    
+    <!-- Modal Component -->
+    <c-box-modal
+        title="Example Modal"
+        is-open={isModalOpen}
+        size="medium"
+        onrequestclose={handleCloseModal}>
+        
+        <!-- Modal Body -->
+        <div class="slds-p-around_medium">
+            <p class="slds-m-bottom_medium">This is an example modal using the converted Box UI Elements.</p>
+            
+            <c-box-checkbox
+                label="Accept terms and conditions"
+                name="modalCheckbox"
+                value="accept"
+                description="You must accept the terms to continue"
+                oncheckboxchange={handleCheckboxChange}>
+            </c-box-checkbox>
+        </div>
+        
+        <!-- Modal Footer -->
+        <div slot="footer">
+            <c-box-button 
+                label="Cancel" 
+                type="button"
+                class-name="slds-m-right_small"
+                onbuttonclick={handleModalCancel}>
+            </c-box-button>
+            <c-box-button 
+                label="Save" 
+                type="button"
+                icon-name="utility:save"
+                onbuttonclick={handleModalSave}>
+            </c-box-button>
+        </div>
+    </c-box-modal>
+</template>

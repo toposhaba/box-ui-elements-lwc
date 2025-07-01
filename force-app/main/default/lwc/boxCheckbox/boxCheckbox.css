@@ -1,0 +1,118 @@
+/* Checkbox container */
+.checkbox-container {
+    display: block;
+    margin-bottom: 16px;
+}
+
+.checkbox-container.is-disabled,
+.checkbox-container.bdl-is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Field label */
+.checkbox-container .label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #222;
+}
+
+/* Checkbox label wrapper */
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Hide native checkbox */
+.checkbox-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Custom checkbox */
+.checkbox-pointer-target {
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    background-color: #fff;
+    border: 1px solid #666;
+    border-radius: 3px;
+    transition: all 0.15s ease-in-out;
+}
+
+/* Checkbox hover state */
+.checkbox-label:hover input[type="checkbox"]:not(:disabled) ~ .checkbox-pointer-target {
+    border-color: #0061d5;
+}
+
+/* Checkbox focus state */
+.checkbox-label input[type="checkbox"]:focus ~ .checkbox-pointer-target {
+    outline: 2px solid #0061d5;
+    outline-offset: 2px;
+}
+
+/* Checkbox checked state */
+.checkbox-label input[type="checkbox"]:checked ~ .checkbox-pointer-target {
+    background-color: #0061d5;
+    border-color: #0061d5;
+}
+
+/* Checkmark */
+.checkbox-label input[type="checkbox"]:checked ~ .checkbox-pointer-target::after {
+    content: "";
+    position: absolute;
+    display: block;
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Label and tooltip wrapper */
+.bdl-Checkbox-labelTooltipWrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.bdl-Checkbox-labelTooltipWrapper.accessibility-hidden {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Checkbox label text */
+.checkbox-label label {
+    margin: 0;
+    cursor: pointer;
+    font-size: 14px;
+    color: #222;
+}
+
+/* Description */
+.checkbox-description {
+    margin-top: 4px;
+    margin-left: 24px;
+    font-size: 13px;
+    color: #666;
+}
+
+/* Subsection */
+.checkbox-subsection {
+    margin-top: 8px;
+    margin-left: 24px;
+}

@@ -1,0 +1,52 @@
+<template>
+    <template if:true={showRadar}>
+        <c-box-radar-animation>
+            <button
+                class={buttonClass}
+                type={type}
+                aria-disabled={ariaDisabled}
+                onclick={handleClick}
+            >
+                <template if:true={showContent}>
+                    <span class="btn-content">{label}</span>
+                </template>
+                <template if:true={showIcon}>
+                    <span class="bdl-btn-icon">
+                        <lightning-icon 
+                            icon-name={iconName}
+                            size="x-small"
+                            alternative-text="Icon"
+                        ></lightning-icon>
+                    </span>
+                </template>
+                <template if:true={isLoading}>
+                    <c-box-loading-indicator class="btn-loading-indicator"></c-box-loading-indicator>
+                </template>
+            </button>
+        </c-box-radar-animation>
+    </template>
+    <template if:false={showRadar}>
+        <button
+            class={buttonClass}
+            type={type}
+            aria-disabled={ariaDisabled}
+            onclick={handleClick}
+        >
+            <template if:true={showContent}>
+                <span class="btn-content">{label}</span>
+            </template>
+            <template if:true={showIcon}>
+                <span class="bdl-btn-icon">
+                    <lightning-icon 
+                        icon-name={iconName}
+                        size="x-small"
+                        alternative-text="Icon"
+                    ></lightning-icon>
+                </span>
+            </template>
+            <template if:true={isLoading}>
+                <c-box-loading-indicator class="btn-loading-indicator"></c-box-loading-indicator>
+            </template>
+        </button>
+    </template>
+</template>

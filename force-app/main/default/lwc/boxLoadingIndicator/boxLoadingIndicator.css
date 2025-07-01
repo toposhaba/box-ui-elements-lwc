@@ -1,0 +1,97 @@
+/* Crawler loading indicator styles */
+.crawler {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 12px;
+}
+
+.crawler div {
+    position: absolute;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #0061d5;
+    animation: crawler 1.2s linear infinite;
+}
+
+.crawler div:nth-child(1) {
+    left: 0;
+    animation-delay: -0.24s;
+}
+
+.crawler div:nth-child(2) {
+    left: 18px;
+    animation-delay: -0.12s;
+}
+
+.crawler div:nth-child(3) {
+    left: 36px;
+    animation-delay: 0;
+}
+
+@keyframes crawler {
+    0% {
+        opacity: 1;
+    }
+    50%,
+    100% {
+        opacity: 0.2;
+    }
+}
+
+/* Size variations */
+.crawler.is-small {
+    width: 24px;
+    height: 6px;
+}
+
+.crawler.is-small div {
+    width: 6px;
+    height: 6px;
+}
+
+.crawler.is-small div:nth-child(2) {
+    left: 9px;
+}
+
+.crawler.is-small div:nth-child(3) {
+    left: 18px;
+}
+
+.crawler.is-medium {
+    width: 36px;
+    height: 9px;
+}
+
+.crawler.is-medium div {
+    width: 9px;
+    height: 9px;
+}
+
+.crawler.is-medium div:nth-child(2) {
+    left: 13.5px;
+}
+
+.crawler.is-medium div:nth-child(3) {
+    left: 27px;
+}
+
+.crawler.is-large {
+    width: 60px;
+    height: 15px;
+}
+
+.crawler.is-large div {
+    width: 15px;
+    height: 15px;
+}
+
+.crawler.is-large div:nth-child(2) {
+    left: 22.5px;
+}
+
+.crawler.is-large div:nth-child(3) {
+    left: 45px;
+}
