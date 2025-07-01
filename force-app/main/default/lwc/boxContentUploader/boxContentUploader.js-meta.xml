@@ -18,6 +18,12 @@
             <property name="isFolderUploadEnabled" type="Boolean" label="Enable Folder Upload" default="false" description="Allow uploading entire folders"/>
             <property name="useUploadsManager" type="Boolean" label="Use Uploads Manager" default="false" description="Show uploads manager for tracking multiple uploads"/>
             <property name="allowedExtensions" type="String" label="Allowed File Extensions" description="Comma-separated list of allowed file extensions (e.g., jpg,png,pdf)"/>
+            <property name="token" type="String" label="Box API Token" description="Box API access token for authentication"/>
+            <property name="apiHost" type="String" label="API Host" description="Box API host URL (defaults to https://api.box.com)"/>
+            <property name="uploadHost" type="String" label="Upload Host" description="Box upload host URL (defaults to https://upload.box.com)"/>
+            <property name="sharedLink" type="String" label="Shared Link" description="Box shared link for accessing content"/>
+            <property name="sharedLinkPassword" type="String" label="Shared Link Password" description="Password for the shared link"/>
+            <property name="overwrite" type="Boolean" label="Overwrite Files" default="true" description="Whether to overwrite files with the same name"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

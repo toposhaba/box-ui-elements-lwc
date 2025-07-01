@@ -1,5 +1,5 @@
 import { LightningElement, api, track } from 'lwc';
-import { loadScript } from 'lightning/platformResourceLoader';
+import { createBoxApiService } from 'c/boxApiService';
 
 // Constants
 const VIEW_UPLOAD_EMPTY = 'upload-empty';
@@ -25,6 +25,12 @@ export default class BoxContentUploader extends LightningElement {
     @api isFolderUploadEnabled = false;
     @api useUploadsManager = false;
     @api allowedExtensions = [];
+    @api token;
+    @api apiHost;
+    @api uploadHost;
+    @api sharedLink;
+    @api sharedLinkPassword;
+    @api overwrite = true;
     
     @track view = VIEW_UPLOAD_EMPTY;
     @track items = [];
@@ -36,6 +42,8 @@ export default class BoxContentUploader extends LightningElement {
     itemIds = {};
     uploadQueue = [];
     activeUploads = 0;
+    boxApiService = null;
+    activeXhrs = new Map();
     
     get showContent() {
         return this.view !== VIEW_ERROR;
@@ -106,6 +114,29 @@ export default class BoxContentUploader extends LightningElement {
         });
         
         return totalSize > 0 ? (totalUploaded / totalSize) * 100 : 0;
+    }
+    
+    connectedCallback() {
+        // Initialize Box API service if token is provided
+        if (this.token) {
+            this.initializeBoxApiService();
+        }
+    }
+    
+    initializeBoxApiService() {
+        this.boxApiService = createBoxApiService({
+            token: this.token,
+            apiHost: this.apiHost,
+            uploadHost: this.uploadHost,
+            sharedLink: this.sharedLink,
+            sharedLinkPassword: this.sharedLinkPassword,
+            clientName: 'BoxContentUploader-LWC'
+        });
+        
+        // Update view to show upload area if service is initialized
+        if (this.view === VIEW_ERROR) {
+            this.view = VIEW_UPLOAD_EMPTY;
+        }
     }
     
     handleDragEnter(event) {
@@ -255,8 +286,12 @@ export default class BoxContentUploader extends LightningElement {
                 startTime: Date.now()
             });
             
-            // Simulate upload progress (replace with actual upload logic)
-            await this.simulateUpload(item);
+            // Use Box API service if available, otherwise simulate
+            if (this.boxApiService && this.token) {
+                await this.uploadFileToBox(item);
+            } else {
+                await this.simulateUpload(item);
+            }
             
             // Update item status to complete
             this.updateItem(item.id, {
@@ -275,7 +310,7 @@ export default class BoxContentUploader extends LightningElement {
             // Handle upload error
             this.updateItem(item.id, {
                 status: STATUS_ERROR,
-                error: error.message
+                error: error.message || 'Upload failed'
             });
             
             // Dispatch error event
@@ -287,12 +322,56 @@ export default class BoxContentUploader extends LightningElement {
             
         } finally {
             this.activeUploads--;
+            this.activeXhrs.delete(item.id);
             this.processUploadQueue();
             this.checkAllUploadsComplete();
         }
     }
     
-    // Simulate upload with progress updates (replace with actual upload implementation)
+    // Upload file to Box using Box API
+    async uploadFileToBox(item) {
+        return new Promise((resolve, reject) => {
+            const xhr = this.boxApiService.uploadFile(item.file, this.rootFolderId, {
+                fileName: item.name,
+                overwrite: this.overwrite,
+                onProgress: (progressData) => {
+                    const progress = progressData.percent;
+                    const elapsedTime = Date.now() - item.startTime;
+                    const speed = progressData.loaded / (elapsedTime / 1000);
+                    
+                    this.updateItem(item.id, {
+                        progress,
+                        uploadedSize: progressData.loaded,
+                        speed
+                    });
+                    
+                    // Dispatch progress event
+                    this.dispatchEvent(new CustomEvent('uploadprogress', {
+                        detail: { item, progress },
+                        bubbles: true,
+                        composed: true
+                    }));
+                },
+                onSuccess: (entries) => {
+                    // Store the Box file info
+                    this.updateItem(item.id, {
+                        boxFile: entries[0]
+                    });
+                    resolve(entries);
+                },
+                onError: (error) => {
+                    reject(error);
+                }
+            });
+            
+            // Store XHR reference for cancellation
+            if (xhr) {
+                this.activeXhrs.set(item.id, xhr);
+            }
+        });
+    }
+    
+    // Simulate upload with progress updates (fallback when Box API is not configured)
     async simulateUpload(item) {
         const totalSteps = 10;
         const stepDelay = 200; // ms
@@ -334,8 +413,16 @@ export default class BoxContentUploader extends LightningElement {
         
         if (item && item.status === STATUS_IN_PROGRESS) {
             // Cancel upload if in progress
-            // Add cancellation logic here
+            const xhr = this.activeXhrs.get(itemId);
+            if (xhr) {
+                xhr.abort();
+                this.activeXhrs.delete(itemId);
+                this.activeUploads--;
+            }
         }
+        
+        // Remove from item IDs tracking
+        delete this.itemIds[itemId];
         
         this.items = this.items.filter(item => item.id !== itemId);
         

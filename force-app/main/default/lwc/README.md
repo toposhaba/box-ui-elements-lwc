@@ -153,16 +153,22 @@ A tooltip component specifically for checkbox help text.
 The components maintain their original CSS classes for styling compatibility. You can override styles using CSS in your parent components or by passing custom classes via the `className` property.
 
 ### 7. boxContentUploader
-A comprehensive file upload component with drag-and-drop support, progress tracking, and upload management.
+A comprehensive file upload component with drag-and-drop support, progress tracking, and full Box API integration.
 
 **Properties:**
 - `fileLimit` - Maximum number of files (default: 100)
-- `rootFolderId` - Target folder ID for uploads
+- `rootFolderId` - Target folder ID for uploads (default: '0' for root)
 - `isLarge` - Use large size variant
 - `isSmall` - Use small size variant
 - `isFolderUploadEnabled` - Enable folder uploads
 - `useUploadsManager` - Show uploads manager UI
 - `allowedExtensions` - Comma-separated list of allowed file extensions
+- `token` - Box API access token (required for Box uploads)
+- `apiHost` - Box API host URL (optional)
+- `uploadHost` - Box upload host URL (optional)
+- `sharedLink` - Box shared link for accessing content
+- `sharedLinkPassword` - Password for the shared link
+- `overwrite` - Whether to overwrite files with same name (default: true)
 
 **Events:**
 - `filesadded` - Fired when files are added to queue
@@ -173,6 +179,8 @@ A comprehensive file upload component with drag-and-drop support, progress track
 - `itemremoved` - Fired when an item is removed
 
 **Example Usage:**
+
+Basic usage (simulated uploads):
 ```html
 <c-box-content-uploader
     file-limit="50"
@@ -180,6 +188,21 @@ A comprehensive file upload component with drag-and-drop support, progress track
     allowed-extensions="jpg,png,pdf,docx"
     onfilesadded={handleFilesAdded}
     onuploadcomplete={handleUploadComplete}>
+</c-box-content-uploader>
+```
+
+With Box API integration:
+```html
+<c-box-content-uploader
+    token={boxApiToken}
+    root-folder-id="123456789"
+    file-limit="50"
+    use-uploads-manager={true}
+    allowed-extensions="jpg,png,pdf,docx"
+    overwrite={false}
+    onfilesadded={handleFilesAdded}
+    onuploadcomplete={handleUploadComplete}
+    onuploaderror={handleUploadError}>
 </c-box-content-uploader>
 ```
 
@@ -220,10 +243,41 @@ The upload components provide:
 - **Drag and Drop**: Drag files directly onto the upload area
 - **Progress Tracking**: Real-time upload progress for each file
 - **Concurrent Uploads**: Upload multiple files simultaneously
-- **Error Handling**: Retry failed uploads
+- **Error Handling**: Retry failed uploads with automatic retry logic
 - **File Validation**: Restrict uploads by file type
 - **Upload Manager**: Track all uploads in a collapsible panel
 - **Responsive Design**: Works on desktop and mobile
+- **Box API Integration**: Full integration with Box APIs for real uploads
+- **Conflict Resolution**: Automatic handling of filename conflicts
+- **SHA1 Verification**: File integrity checking during uploads
+
+## Box API Integration
+
+The upload components include full Box API integration matching the original Box UI Elements:
+
+### Authentication
+Provide a Box API token to enable real uploads:
+```javascript
+// In your Lightning component
+boxApiToken = 'YOUR_BOX_API_TOKEN';
+```
+
+### Features Implemented
+- **Preflight Requests**: Validates uploads before starting
+- **Chunked Uploads**: For large files (future enhancement)
+- **Progress Tracking**: Real-time upload progress from Box API
+- **Error Handling**: Automatic retry with exponential backoff
+- **Conflict Resolution**: Handle duplicate filenames (overwrite or rename)
+- **SHA1 Hashing**: File integrity verification
+- **Rate Limiting**: Respects Box API rate limits
+
+### API Service Module
+The `boxApiService` module provides:
+- File upload with progress tracking
+- Folder creation
+- Folder content listing
+- Automatic retry logic
+- Error handling
 
 ## Notes
 
