@@ -28,7 +28,7 @@
                 <ul class="slds-tabs_default__nav" role="tablist">
                     <template for:each={tabs} for:item="tab">
                         <li key={tab.id} 
-                            class={tab.id === activeTab ? 'slds-tabs_default__item slds-is-active' : 'slds-tabs_default__item'}
+                            class={tab.cssClass}
                             role="presentation">
                             <a class="slds-tabs_default__link"
                                role="tab"
@@ -80,10 +80,10 @@
                             <template if:true={file.permissions}>
                                 <h4 class="slds-text-heading_x-small slds-m-top_medium slds-m-bottom_small">Permissions</h4>
                                 <ul class="slds-list_dotted">
-                                    <li>Can Download: {file.permissions.can_download ? 'Yes' : 'No'}</li>
-                                    <li>Can Preview: {file.permissions.can_preview ? 'Yes' : 'No'}</li>
-                                    <li>Can Edit: {file.permissions.can_edit ? 'Yes' : 'No'}</li>
-                                    <li>Can Share: {file.permissions.can_share ? 'Yes' : 'No'}</li>
+                                    <li>Can Download: {canDownloadText}</li>
+                                    <li>Can Preview: {canPreviewText}</li>
+                                    <li>Can Edit: {canEditText}</li>
+                                    <li>Can Share: {canShareText}</li>
                                 </ul>
                             </template>
                         </div>

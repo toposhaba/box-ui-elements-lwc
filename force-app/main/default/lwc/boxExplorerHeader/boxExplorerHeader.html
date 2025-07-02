@@ -34,14 +34,14 @@
                             <lightning-button-icon
                                 icon-name="utility:list"
                                 alternative-text="List View"
-                                variant={isListView ? 'brand' : 'neutral'}
+                                variant={listViewVariant}
                                 data-mode="list"
                                 onclick={handleViewModeChange}>
                             </lightning-button-icon>
                             <lightning-button-icon
                                 icon-name="utility:apps"
                                 alternative-text="Grid View"
-                                variant={isGridView ? 'brand' : 'neutral'}
+                                variant={gridViewVariant}
                                 data-mode="grid"
                                 onclick={handleViewModeChange}>
                             </lightning-button-icon>

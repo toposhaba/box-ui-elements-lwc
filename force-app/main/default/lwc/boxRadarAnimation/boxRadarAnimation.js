@@ -2,7 +2,7 @@ import { LightningElement, api } from 'lwc';
 
 export default class BoxRadarAnimation extends LightningElement {
     @api className = '';
-    @api isShown = true;
+    @api isShown = false;
     
     radarAnimationId = `radarAnimation_${Date.now()}`;
     

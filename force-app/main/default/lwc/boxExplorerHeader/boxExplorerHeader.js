@@ -2,8 +2,8 @@ import { LightningElement, api } from 'lwc';
 
 export default class BoxExplorerHeader extends LightningElement {
     @api currentFolderName = 'Files';
-    @api canCreateNewFolder = true;
-    @api canUpload = true;
+    @api canCreateNewFolder = false;
+    @api canUpload = false;
     @api searchQuery = '';
     @api viewMode = 'list';
     
@@ -13,6 +13,14 @@ export default class BoxExplorerHeader extends LightningElement {
     
     get isGridView() {
         return this.viewMode === 'grid';
+    }
+    
+    get listViewVariant() {
+        return this.isListView ? 'brand' : 'neutral';
+    }
+    
+    get gridViewVariant() {
+        return this.isGridView ? 'brand' : 'neutral';
     }
     
     handleSearch(event) {

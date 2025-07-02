@@ -32,7 +32,7 @@
                     <c-box-button 
                         label="Disabled Button" 
                         type="button"
-                        is-disabled={true}
+                        is-disabled="true"
                         class-name="slds-m-left_small"
                         onbuttonclick={handleButtonClick}>
                     </c-box-button>
@@ -89,8 +89,8 @@
                     label="Disabled Checkbox"
                     name="disabled"
                     value="disabled"
-                    is-disabled={true}
-                    is-checked={true}
+                    is-disabled="true"
+                    is-checked="true"
                     oncheckboxchange={handleCheckboxChange}>
                 </c-box-checkbox>
             </div>
@@ -137,7 +137,7 @@
                 
                 <c-box-content-uploader
                     file-limit="10"
-                    use-uploads-manager={true}
+                    use-uploads-manager="true"
                     allowed-extensions="jpg,png,pdf,docx,xlsx"
                     onfilesadded={handleFilesAdded}
                     onuploadcomplete={handleUploadComplete}
@@ -152,13 +152,13 @@
                     <c-box-content-explorer
                         token={boxToken}
                         root-folder-id="0"
-                        can-download={true}
-                        can-delete={true}
-                        can-rename={true}
-                        can-share={true}
-                        can-preview={true}
-                        can-upload={true}
-                        can-create-new-folder={true}
+                        can-download="true"
+                        can-delete="true"
+                        can-rename="true"
+                        can-share="true"
+                        can-preview="true"
+                        can-upload="true"
+                        can-create-new-folder="true"
                         onnavigate={handleNavigate}
                         onselect={handleSelect}
                         oncreate={handleCreate}
@@ -200,9 +200,9 @@
                     <c-box-content-preview
                         file-id={previewFileId}
                         token={boxToken}
-                        show-annotations={false}
-                        can-download={true}
-                        can-print={true}
+                        show-annotations="false"
+                        can-download="true"
+                        can-print="true"
                         onload={handlePreviewLoad}
                         onerror={handlePreviewError}>
                     </c-box-content-preview>
@@ -252,7 +252,7 @@
                         <c-box-content-sidebar
                             file-id={previewFileId}
                             token={boxToken}
-                            show-a-i={true}
+                            show-a-i="true"
                             default-panel="ai">
                         </c-box-content-sidebar>
                     </div>
@@ -320,7 +320,7 @@
                     <c-box-content-picker
                         token={boxToken}
                         root-folder-id="0"
-                        can-select-multiple={true}
+                        can-select-multiple="true"
                         onchoose={handleChoose}
                         oncancel={closePicker}>
                     </c-box-content-picker>
