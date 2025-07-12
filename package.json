@@ -292,7 +292,11 @@
         "webpack": "^5.92.0",
         "webpack-bundle-analyzer": "^4.10.2",
         "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^5.2.1"
+        "webpack-dev-server": "^5.2.1",
+        "tesseract.js": "^5.1.0",
+        "@ffmpeg/ffmpeg": "^0.12.8",
+        "@ffmpeg/core": "^0.12.4",
+        "@ffmpeg/util": "^0.12.1"
     },
     "peerDependencies": {
         "@box/blueprint-web": "^12.7.1",

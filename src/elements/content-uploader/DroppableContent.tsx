@@ -20,6 +20,10 @@ export interface DroppableContentProps {
     items: UploadItem[];
     onClick: (item: UploadItem) => void;
     view: View;
+    enableOCR?: boolean;
+    enableTranscription?: boolean;
+    onOCRChange?: (enabled: boolean) => void;
+    onTranscriptionChange?: (enabled: boolean) => void;
 }
 
 /**
@@ -59,6 +63,10 @@ const DroppableContent = makeDroppable(dropDefinition)(({
     items,
     onClick,
     view,
+    enableOCR,
+    enableTranscription,
+    onOCRChange,
+    onTranscriptionChange,
 }: DroppableContentProps) => {
     const handleSelectFiles = ({ target: { files } }) => addFiles(files);
     const hasItems = items.length > 0;
@@ -74,6 +82,10 @@ const DroppableContent = makeDroppable(dropDefinition)(({
                 isTouch={isTouch}
                 onSelect={handleSelectFiles}
                 view={view}
+                enableOCR={enableOCR}
+                enableTranscription={enableTranscription}
+                onOCRChange={onOCRChange}
+                onTranscriptionChange={onTranscriptionChange}
             />
         </div>
     );

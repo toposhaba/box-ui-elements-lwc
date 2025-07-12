@@ -20,6 +20,10 @@ export interface UploadStateProps {
     isTouch: boolean;
     onSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
     view: View;
+    enableOCR?: boolean;
+    enableTranscription?: boolean;
+    onOCRChange?: (enabled: boolean) => void;
+    onTranscriptionChange?: (enabled: boolean) => void;
 }
 
 const UploadState = ({
@@ -30,6 +34,10 @@ const UploadState = ({
     view,
     onSelect,
     isFolderUploadEnabled,
+    enableOCR,
+    enableTranscription,
+    onOCRChange,
+    onTranscriptionChange,
 }: UploadStateProps) => {
     const { formatMessage } = useIntl();
     let icon;
@@ -61,6 +69,10 @@ const UploadState = ({
                                 : formatMessage(messages.uploadEmptyWithFolderUploadDisabled)
                         }
                         onChange={onSelect}
+                        enableOCR={enableOCR}
+                        enableTranscription={enableTranscription}
+                        onOCRChange={onOCRChange}
+                        onTranscriptionChange={onTranscriptionChange}
                     />
                 );
             /* eslint-enable no-nested-ternary */
@@ -78,6 +90,10 @@ const UploadState = ({
                     message={formatMessage(messages.uploadSuccess)}
                     onChange={onSelect}
                     useButton={isTouch}
+                    enableOCR={enableOCR}
+                    enableTranscription={enableTranscription}
+                    onOCRChange={onOCRChange}
+                    onTranscriptionChange={onTranscriptionChange}
                 />
             );
             break;
