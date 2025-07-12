@@ -147,6 +147,46 @@ const messages = defineMessages({
         description: 'Label for upload action.',
         defaultMessage: 'Upload',
     },
+    enableOCR: {
+        id: 'be.enableOCR',
+        description: 'Label for enabling OCR (Optical Character Recognition) on image files.',
+        defaultMessage: 'Enable OCR for images',
+    },
+    enableTranscription: {
+        id: 'be.enableTranscription',
+        description: 'Label for enabling transcription on audio and video files.',
+        defaultMessage: 'Enable transcription for audio/video',
+    },
+    processingOCR: {
+        id: 'be.processingOCR',
+        description: 'Message shown when OCR processing is in progress.',
+        defaultMessage: 'Processing OCR...',
+    },
+    processingTranscription: {
+        id: 'be.processingTranscription',
+        description: 'Message shown when transcription processing is in progress.',
+        defaultMessage: 'Processing transcription...',
+    },
+    ocrComplete: {
+        id: 'be.ocrComplete',
+        description: 'Message shown when OCR processing is complete.',
+        defaultMessage: 'OCR processing complete',
+    },
+    transcriptionComplete: {
+        id: 'be.transcriptionComplete',
+        description: 'Message shown when transcription processing is complete.',
+        defaultMessage: 'Transcription processing complete',
+    },
+    ocrError: {
+        id: 'be.ocrError',
+        description: 'Error message when OCR processing fails.',
+        defaultMessage: 'OCR processing failed',
+    },
+    transcriptionError: {
+        id: 'be.transcriptionError',
+        description: 'Error message when transcription processing fails.',
+        defaultMessage: 'Transcription processing failed',
+    },
     uploadEmptyState: {
         id: 'be.uploadEmptyState',
         description: 'Label for upload empty state.',

@@ -101,6 +101,10 @@ export interface ContentUploaderProps {
     token?: Token;
     uploadHost: string;
     useUploadsManager?: boolean;
+    enableOCR?: boolean;
+    enableTranscription?: boolean;
+    onOCRChange?: (enabled: boolean) => void;
+    onTranscriptionChange?: (enabled: boolean) => void;
 }
 
 type State = {
@@ -109,6 +113,8 @@ type State = {
     itemIds: Object;
     items: UploadItem[];
     view: View;
+    enableOCR: boolean;
+    enableTranscription: boolean;
 };
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 104857600; // 100MB
@@ -183,6 +189,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             errorCode: '',
             itemIds: {},
             isUploadsManagerExpanded: false,
+            enableOCR: props.enableOCR || false,
+            enableTranscription: props.enableTranscription || false,
         };
         this.id = uniqueid('bcu_');
 
@@ -355,15 +363,51 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         this.setState({ itemIds: newItemIdsState }, () => {
             onBeforeUpload(newFiles);
-            if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
-                // webkitRelativePath should be ignored when the upload destination folder is known
-                this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
-            } else {
-                this.addFilesWithoutRelativePathToQueue(
-                    newFiles,
-                    isPrepopulateFilesEnabled ? this.upload : itemUpdateCallback,
-                );
+            
+            // Process files with OCR/transcription if enabled
+            this.processFilesIfNeeded(newFiles).then(() => {
+                if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
+                    // webkitRelativePath should be ignored when the upload destination folder is known
+                    this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
+                } else {
+                    this.addFilesWithoutRelativePathToQueue(
+                        newFiles,
+                        isPrepopulateFilesEnabled ? this.upload : itemUpdateCallback,
+                    );
+                }
+            });
+        });
+    };
+
+    /**
+     * Process files with OCR/transcription if enabled
+     *
+     * @private
+     * @param {Array<UploadFileWithAPIOptions | UploadFile>} files
+     * @returns {Promise<void>}
+     */
+    processFilesIfNeeded = (files: Array<UploadFileWithAPIOptions | UploadFile>): Promise<void> => {
+        return new Promise((resolve) => {
+            const { enableOCR, enableTranscription } = this.state;
+            
+            if (!enableOCR && !enableTranscription) {
+                resolve();
+                return;
             }
+
+            // For now, we'll just resolve immediately as a placeholder
+            // In a real implementation, you would process files with OCR/transcription here
+            // and potentially store the results in the file metadata or separate storage
+            console.log('Processing files with OCR/transcription options:', {
+                enableOCR,
+                enableTranscription,
+                fileCount: files.length
+            });
+
+            // Simulate processing time
+            setTimeout(() => {
+                resolve();
+            }, 100);
         });
     };
 
@@ -1238,6 +1282,34 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     };
 
     /**
+     * Handle OCR checkbox change
+     *
+     * @param {boolean} enabled
+     * @return {void}
+     */
+    handleOCRChange = (enabled: boolean): void => {
+        const { onOCRChange } = this.props;
+        this.setState({ enableOCR: enabled });
+        if (onOCRChange) {
+            onOCRChange(enabled);
+        }
+    };
+
+    /**
+     * Handle transcription checkbox change
+     *
+     * @param {boolean} enabled
+     * @return {void}
+     */
+    handleTranscriptionChange = (enabled: boolean): void => {
+        const { onTranscriptionChange } = this.props;
+        this.setState({ enableTranscription: enabled });
+        if (onTranscriptionChange) {
+            onTranscriptionChange(enabled);
+        }
+    };
+
+    /**
      * Renders the content uploader
      *
      * @inheritdoc
@@ -1259,7 +1331,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             theme,
             useUploadsManager,
         }: ContentUploaderProps = this.props;
-        const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
+        const { view, items, errorCode, isUploadsManagerExpanded, enableOCR, enableTranscription }: State = this.state;
         const isEmpty = items.length === 0;
         const isVisible = !isEmpty || !!isDraggingItemsToUploadsManager;
 
@@ -1304,6 +1376,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                                 items={items}
                                 onClick={this.onClick}
                                 view={view}
+                                enableOCR={enableOCR}
+                                enableTranscription={enableTranscription}
+                                onOCRChange={this.handleOCRChange}
+                                onTranscriptionChange={this.handleTranscriptionChange}
                             />
                             <Footer
                                 errorCode={errorCode}
