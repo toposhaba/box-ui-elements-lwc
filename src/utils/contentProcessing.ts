@@ -7,16 +7,24 @@ const AUDIO_TYPES = ['audio/mp3', 'audio/wav', 'audio/ogg', 'audio/m4a', 'audio/
 // Video file types that support transcription (audio will be extracted)
 const VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg', 'video/avi', 'video/mov', 'video/wmv'];
 
+// Import the media preprocessor
+import mediaPreprocessor, { MediaPreprocessorOptions, MediaPreprocessorResult } from './mediaPreprocessor';
+
 export interface ProcessingResult {
     success: boolean;
     content?: string;
     error?: string;
-    type: 'ocr' | 'transcription';
+    type: 'ocr' | 'transcription' | 'media_preprocessing';
+    metadata?: any;
+    processedFile?: Blob;
+    audioData?: Float32Array;
 }
 
 export interface ProcessingOptions {
     enableOCR: boolean;
     enableTranscription: boolean;
+    enableMediaPreprocessing?: boolean;
+    mediaOptions?: MediaPreprocessorOptions;
     onProgress?: (progress: number, message: string) => void;
 }
 
@@ -31,6 +39,13 @@ export function supportsOCR(file: File): boolean {
  * Check if a file supports transcription processing
  */
 export function supportsTranscription(file: File): boolean {
+    return AUDIO_TYPES.indexOf(file.type.toLowerCase()) !== -1 || VIDEO_TYPES.indexOf(file.type.toLowerCase()) !== -1;
+}
+
+/**
+ * Check if a file supports media preprocessing
+ */
+export function supportsMediaPreprocessing(file: File): boolean {
     return AUDIO_TYPES.indexOf(file.type.toLowerCase()) !== -1 || VIDEO_TYPES.indexOf(file.type.toLowerCase()) !== -1;
 }
 
@@ -69,12 +84,10 @@ export function processOCR(file: File, onProgress?: (progress: number, message: 
 }
 
 /**
- * Process transcription on an audio file
- * Note: This is a placeholder implementation. The actual transcription processing
- * will be implemented when the speech recognition APIs are properly configured.
+ * Process transcription on an audio/video file using media preprocessor
  */
 export function processTranscription(file: File, onProgress?: (progress: number, message: string) => void): Promise<ProcessingResult> {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
         if (!supportsTranscription(file)) {
             resolve({
                 success: false,
@@ -84,26 +97,107 @@ export function processTranscription(file: File, onProgress?: (progress: number,
             return;
         }
 
-        // Placeholder implementation - will be replaced with actual transcription processing
-        if (onProgress) {
-            onProgress(0, 'Initializing transcription...');
-        }
-
-        setTimeout(() => {
+        try {
             if (onProgress) {
-                onProgress(100, 'Transcription complete');
+                onProgress(0, 'Initializing transcription...');
             }
+
+            // Use media preprocessor to extract audio data first
+            const mediaOptions: MediaPreprocessorOptions = {
+                extractMetadata: true,
+                extractAudio: file.type.startsWith('video/'),
+                onProgress: (progress, message) => {
+                    if (onProgress) {
+                        onProgress(progress * 0.5, `Preprocessing: ${message}`);
+                    }
+                }
+            };
+
+            const preprocessResult = await mediaPreprocessor.processMediaFile(file, mediaOptions);
+            
+            if (!preprocessResult.success) {
+                resolve({
+                    success: false,
+                    error: preprocessResult.error || 'Media preprocessing failed',
+                    type: 'transcription'
+                });
+                return;
+            }
+
+            if (onProgress) {
+                onProgress(50, 'Media preprocessing complete, starting transcription...');
+            }
+
+            // TODO: Implement actual transcription using speech recognition API
+            // For now, return metadata and placeholder transcription
+            setTimeout(() => {
+                if (onProgress) {
+                    onProgress(100, 'Transcription complete');
+                }
+                resolve({
+                    success: true,
+                    content: `Transcription placeholder for ${file.name}. Duration: ${preprocessResult.metadata?.duration?.toFixed(2)}s`,
+                    type: 'transcription',
+                    metadata: preprocessResult.metadata,
+                    processedFile: preprocessResult.processedFile,
+                    audioData: preprocessResult.audioData
+                });
+            }, 1000);
+
+        } catch (error) {
             resolve({
-                success: true,
-                content: 'Transcription processing not yet implemented - placeholder transcript for ' + file.name,
+                success: false,
+                error: error instanceof Error ? error.message : 'Unknown transcription error',
                 type: 'transcription'
             });
-        }, 1500);
+        }
     });
 }
 
 /**
- * Process a file with OCR or transcription based on its type and options
+ * Process media file with preprocessing
+ */
+export function processMediaPreprocessing(file: File, options: MediaPreprocessorOptions, onProgress?: (progress: number, message: string) => void): Promise<ProcessingResult> {
+    return new Promise(async (resolve) => {
+        if (!supportsMediaPreprocessing(file)) {
+            resolve({
+                success: false,
+                error: 'File type not supported for media preprocessing',
+                type: 'media_preprocessing'
+            });
+            return;
+        }
+
+        try {
+            const mediaOptions: MediaPreprocessorOptions = {
+                ...options,
+                onProgress
+            };
+
+            const result = await mediaPreprocessor.processMediaFile(file, mediaOptions);
+            
+            resolve({
+                success: result.success,
+                content: result.success ? `Media preprocessing completed for ${file.name}` : undefined,
+                error: result.error,
+                type: 'media_preprocessing',
+                metadata: result.metadata,
+                processedFile: result.processedFile,
+                audioData: result.audioData
+            });
+
+        } catch (error) {
+            resolve({
+                success: false,
+                error: error instanceof Error ? error.message : 'Unknown media preprocessing error',
+                type: 'media_preprocessing'
+            });
+        }
+    });
+}
+
+/**
+ * Process a file with OCR, transcription, or media preprocessing based on its type and options
  */
 export function processFile(file: File, options: ProcessingOptions): Promise<ProcessingResult[]> {
     return new Promise((resolve) => {
@@ -116,6 +210,10 @@ export function processFile(file: File, options: ProcessingOptions): Promise<Pro
 
         if (options.enableTranscription && supportsTranscription(file)) {
             promises.push(processTranscription(file, options.onProgress));
+        }
+
+        if (options.enableMediaPreprocessing && supportsMediaPreprocessing(file) && options.mediaOptions) {
+            promises.push(processMediaPreprocessing(file, options.mediaOptions, options.onProgress));
         }
 
         if (promises.length === 0) {
