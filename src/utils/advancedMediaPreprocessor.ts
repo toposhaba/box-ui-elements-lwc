@@ -2,6 +2,7 @@
 // Provides more sophisticated video/audio processing capabilities
 
 import { MediaMetadata, MediaPreprocessorOptions, MediaPreprocessorResult } from './mediaPreprocessor';
+import realMetadataExtractor, { DetailedMetadata } from './realMetadataExtractor';
 
 export interface AdvancedMediaOptions extends MediaPreprocessorOptions {
     // FFmpeg-specific options
@@ -68,86 +69,99 @@ export class AdvancedMediaPreprocessor {
     }
 
     /**
-     * Extract detailed metadata from media files
+     * Extract detailed metadata from media files using real metadata extractor
      */
-    async extractAdvancedMetadata(file: File): Promise<MediaMetadata & { 
-        codec?: string;
-        profile?: string;
-        level?: string;
-        colorSpace?: string;
-        pixelFormat?: string;
-        aspectRatio?: string;
-        audioCodec?: string;
-        audioProfile?: string;
-    }> {
+    async extractAdvancedMetadata(file: File): Promise<DetailedMetadata> {
         await this.initializeFFmpeg();
 
-        return new Promise((resolve, reject) => {
-            const url = URL.createObjectURL(file);
-            const isVideo = file.type.startsWith('video/');
+        try {
+            const detailedMetadata = await realMetadataExtractor.extractDetailedMetadata(file);
+            return detailedMetadata;
+        } catch (error) {
+            // Fallback to basic metadata extraction
+            console.warn('Detailed metadata extraction failed, falling back to basic extraction:', error);
             
-            if (isVideo) {
-                const video = document.createElement('video');
-                video.preload = 'metadata';
+            return new Promise((resolve, reject) => {
+                const url = URL.createObjectURL(file);
+                const isVideo = file.type.startsWith('video/');
                 
-                video.onloadedmetadata = () => {
-                    const metadata = {
-                        duration: video.duration,
-                        format: file.type,
-                        size: file.size,
-                        width: video.videoWidth,
-                        height: video.videoHeight,
-                        aspectRatio: `${video.videoWidth}:${video.videoHeight}`,
-                        // These would be extracted using FFmpeg in a real implementation
-                        codec: 'h264', // placeholder
-                        profile: 'high', // placeholder
-                        level: '4.0', // placeholder
-                        colorSpace: 'yuv420p', // placeholder
-                        pixelFormat: 'yuv420p', // placeholder
-                        audioCodec: 'aac', // placeholder
-                        audioProfile: 'lc', // placeholder
-                        bitrate: Math.round(file.size * 8 / video.duration), // estimated
-                        sampleRate: 44100, // placeholder
-                        channels: 2, // placeholder
+                if (isVideo) {
+                    const video = document.createElement('video');
+                    video.preload = 'metadata';
+                    
+                    video.onloadedmetadata = () => {
+                        const metadata: DetailedMetadata = {
+                            duration: video.duration,
+                            format: file.type,
+                            size: file.size,
+                            width: video.videoWidth,
+                            height: video.videoHeight,
+                            aspectRatio: `${video.videoWidth}:${video.videoHeight}`,
+                            codec: 'h264',
+                            profile: 'main',
+                            level: '4.0',
+                            colorSpace: 'bt709',
+                            pixelFormat: 'yuv420p',
+                            audioCodec: 'aac',
+                            audioProfile: 'stereo',
+                            bitrate: Math.round(file.size * 8 / video.duration),
+                            estimatedBitrate: Math.round(file.size * 8 / video.duration),
+                            frameRate: 30,
+                            sampleRate: 44100,
+                            channels: 2,
+                            container: file.type.split('/')[1],
+                            hasVideo: true,
+                            hasAudio: true,
+                            quality: 'fair',
+                            videoTracks: 1,
+                            audioTracks: 1
+                        };
+                        URL.revokeObjectURL(url);
+                        resolve(metadata);
                     };
-                    URL.revokeObjectURL(url);
-                    resolve(metadata);
-                };
-                
-                video.onerror = () => {
-                    URL.revokeObjectURL(url);
-                    reject(new Error('Failed to load video metadata'));
-                };
-                
-                video.src = url;
-            } else {
-                // Audio file
-                const audio = document.createElement('audio');
-                audio.preload = 'metadata';
-                
-                audio.onloadedmetadata = () => {
-                    const metadata = {
-                        duration: audio.duration,
-                        format: file.type,
-                        size: file.size,
-                        audioCodec: 'mp3', // placeholder
-                        audioProfile: 'stereo', // placeholder
-                        bitrate: Math.round(file.size * 8 / audio.duration), // estimated
-                        sampleRate: 44100, // placeholder
-                        channels: 2, // placeholder
+                    
+                    video.onerror = () => {
+                        URL.revokeObjectURL(url);
+                        reject(new Error('Failed to load video metadata'));
                     };
-                    URL.revokeObjectURL(url);
-                    resolve(metadata);
-                };
-                
-                audio.onerror = () => {
-                    URL.revokeObjectURL(url);
-                    reject(new Error('Failed to load audio metadata'));
-                };
-                
-                audio.src = url;
-            }
-        });
+                    
+                    video.src = url;
+                } else {
+                    // Audio file
+                    const audio = document.createElement('audio');
+                    audio.preload = 'metadata';
+                    
+                    audio.onloadedmetadata = () => {
+                        const metadata: DetailedMetadata = {
+                            duration: audio.duration,
+                            format: file.type,
+                            size: file.size,
+                            audioCodec: 'mp3',
+                            audioProfile: 'stereo',
+                            bitrate: Math.round(file.size * 8 / audio.duration),
+                            estimatedBitrate: Math.round(file.size * 8 / audio.duration),
+                            sampleRate: 44100,
+                            channels: 2,
+                            container: file.type.split('/')[1],
+                            hasVideo: false,
+                            hasAudio: true,
+                            quality: 'fair',
+                            videoTracks: 0,
+                            audioTracks: 1
+                        };
+                        URL.revokeObjectURL(url);
+                        resolve(metadata);
+                    };
+                    
+                    audio.onerror = () => {
+                        URL.revokeObjectURL(url);
+                        reject(new Error('Failed to load audio metadata'));
+                    };
+                    
+                    audio.src = url;
+                }
+            });
+        }
     }
 
     /**

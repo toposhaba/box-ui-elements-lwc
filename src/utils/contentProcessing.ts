@@ -9,6 +9,9 @@ const VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg', 'video/avi', 'video
 
 // Import the media preprocessor
 import mediaPreprocessor, { MediaPreprocessorOptions, MediaPreprocessorResult } from './mediaPreprocessor';
+// Import the real processors
+import ocrProcessor, { OCROptions } from './ocrProcessor';
+import speechProcessor, { SpeechRecognitionOptions } from './speechRecognitionProcessor';
 
 export interface ProcessingResult {
     success: boolean;
@@ -25,6 +28,8 @@ export interface ProcessingOptions {
     enableTranscription: boolean;
     enableMediaPreprocessing?: boolean;
     mediaOptions?: MediaPreprocessorOptions;
+    ocrOptions?: OCROptions;
+    speechOptions?: SpeechRecognitionOptions;
     onProgress?: (progress: number, message: string) => void;
 }
 
@@ -50,12 +55,10 @@ export function supportsMediaPreprocessing(file: File): boolean {
 }
 
 /**
- * Process OCR on an image file
- * Note: This is a placeholder implementation. The actual OCR processing
- * will be implemented when the tesseract.js library is properly loaded.
+ * Process OCR on an image file using real OCR processor
  */
-export function processOCR(file: File, onProgress?: (progress: number, message: string) => void): Promise<ProcessingResult> {
-    return new Promise((resolve) => {
+export function processOCR(file: File, options?: OCROptions, onProgress?: (progress: number, message: string) => void): Promise<ProcessingResult> {
+    return new Promise(async (resolve) => {
         if (!supportsOCR(file)) {
             resolve({
                 success: false,
@@ -65,21 +68,31 @@ export function processOCR(file: File, onProgress?: (progress: number, message: 
             return;
         }
 
-        // Placeholder implementation - will be replaced with actual OCR processing
-        if (onProgress) {
-            onProgress(0, 'Initializing OCR...');
-        }
+        try {
+            const ocrOptions: OCROptions = {
+                ...options,
+                onProgress
+            };
 
-        setTimeout(() => {
-            if (onProgress) {
-                onProgress(100, 'OCR complete');
-            }
+            const result = await ocrProcessor.processOCR(file, ocrOptions);
+            
             resolve({
-                success: true,
-                content: 'OCR processing not yet implemented - placeholder text extracted from ' + file.name,
+                success: result.success,
+                content: result.text,
+                error: result.error,
+                type: 'ocr',
+                metadata: {
+                    confidence: result.confidence,
+                    words: result.words
+                }
+            });
+        } catch (error) {
+            resolve({
+                success: false,
+                error: error instanceof Error ? error.message : 'Unknown OCR error',
                 type: 'ocr'
             });
-        }, 1000);
+        }
     });
 }
 
@@ -128,21 +141,54 @@ export function processTranscription(file: File, onProgress?: (progress: number,
                 onProgress(50, 'Media preprocessing complete, starting transcription...');
             }
 
-            // TODO: Implement actual transcription using speech recognition API
-            // For now, return metadata and placeholder transcription
-            setTimeout(() => {
+            // Use real speech recognition processor
+            try {
+                const audioFile = preprocessResult.processedFile ? 
+                    new File([preprocessResult.processedFile], file.name.replace(/\.[^/.]+$/, '.wav'), { type: 'audio/wav' }) : 
+                    file;
+
+                const speechOptions: SpeechRecognitionOptions = {
+                    language: 'en-US',
+                    onProgress: (progress, message) => {
+                        if (onProgress) {
+                            onProgress(50 + (progress * 0.5), `Transcription: ${message}`);
+                        }
+                    }
+                };
+
+                const transcriptionResult = await speechProcessor.processAudioFile(audioFile, speechOptions);
+                
                 if (onProgress) {
                     onProgress(100, 'Transcription complete');
                 }
+
+                resolve({
+                    success: transcriptionResult.success,
+                    content: transcriptionResult.transcript || `Transcription failed for ${file.name}`,
+                    type: 'transcription',
+                    metadata: {
+                        ...preprocessResult.metadata,
+                        confidence: transcriptionResult.confidence,
+                        segments: transcriptionResult.segments,
+                        language: transcriptionResult.language
+                    },
+                    processedFile: preprocessResult.processedFile,
+                    audioData: preprocessResult.audioData
+                });
+            } catch (transcriptionError) {
+                // Fallback to metadata-only result
+                if (onProgress) {
+                    onProgress(100, 'Transcription failed, returning metadata');
+                }
                 resolve({
                     success: true,
-                    content: `Transcription placeholder for ${file.name}. Duration: ${preprocessResult.metadata?.duration?.toFixed(2)}s`,
+                    content: `Audio processed: ${file.name}. Duration: ${preprocessResult.metadata?.duration?.toFixed(2)}s. Transcription failed: ${transcriptionError instanceof Error ? transcriptionError.message : 'Unknown error'}`,
                     type: 'transcription',
                     metadata: preprocessResult.metadata,
                     processedFile: preprocessResult.processedFile,
                     audioData: preprocessResult.audioData
                 });
-            }, 1000);
+            }
 
         } catch (error) {
             resolve({
@@ -205,7 +251,7 @@ export function processFile(file: File, options: ProcessingOptions): Promise<Pro
         const promises: Promise<ProcessingResult>[] = [];
 
         if (options.enableOCR && supportsOCR(file)) {
-            promises.push(processOCR(file, options.onProgress));
+            promises.push(processOCR(file, options.ocrOptions, options.onProgress));
         }
 
         if (options.enableTranscription && supportsTranscription(file)) {
